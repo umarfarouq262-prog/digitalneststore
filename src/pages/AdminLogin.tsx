@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAdmin } from "@/hooks/useAdmin";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,11 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Lock, AlertCircle } from "lucide-react";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAdmin();
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -20,14 +18,23 @@ const AdminLogin = () => {
     setError("");
     setLoading(true);
 
-    const { error: authError } = await signIn(email, password);
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return;
-    }
+    try {
+      const { data, error: fnError } = await supabase.functions.invoke("verify-admin", {
+        body: { password },
+      });
 
-    navigate("/dashboard");
+      if (fnError || !data?.success) {
+        setError(data?.error || fnError?.message || "Invalid password");
+        setLoading(false);
+        return;
+      }
+
+      sessionStorage.setItem("admin_token", data.token);
+      navigate("/dashboard");
+    } catch {
+      setError("Something went wrong");
+    }
+    setLoading(false);
   };
 
   return (
@@ -39,7 +46,7 @@ const AdminLogin = () => {
           </div>
           <CardTitle className="text-2xl font-display text-foreground">Admin Access</CardTitle>
           <CardDescription className="text-muted-foreground font-body">
-            Sign in to manage your products
+            Enter your admin password to continue
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -51,17 +58,6 @@ const AdminLogin = () => {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
-                required
-              />
-            </div>
-            <div className="space-y-2">
               <Label htmlFor="password" className="text-foreground">Password</Label>
               <Input
                 id="password"
@@ -70,10 +66,11 @@ const AdminLogin = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
+                autoFocus
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in…" : "Sign In"}
+              {loading ? "Verifying…" : "Enter Dashboard"}
             </Button>
           </form>
         </CardContent>

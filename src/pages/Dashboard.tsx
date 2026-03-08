@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAdmin } from "@/hooks/useAdmin";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -33,7 +32,6 @@ interface Product {
 const emptyForm = { name: "", description: "", price: "", category: "PDF", image_url: "" };
 
 const Dashboard = () => {
-  const { user, isAdmin, loading, signOut } = useAdmin();
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [form, setForm] = useState(emptyForm);
@@ -43,14 +41,13 @@ const Dashboard = () => {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
+    const token = sessionStorage.getItem("admin_token");
+    if (!token) {
       navigate("/admin");
+      return;
     }
-  }, [user, isAdmin, loading, navigate]);
-
-  useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [navigate]);
 
   const fetchProducts = async () => {
     const { data } = await supabase
@@ -138,12 +135,13 @@ const Dashboard = () => {
     setFile(null);
   };
 
-  if (loading) return <div className="min-h-screen bg-background flex items-center justify-center text-foreground">Loading…</div>;
-  if (!isAdmin) return null;
+  const handleSignOut = () => {
+    sessionStorage.removeItem("admin_token");
+    navigate("/admin");
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Header */}
       <header className="border-b border-border bg-card">
         <div className="container flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
@@ -152,7 +150,7 @@ const Dashboard = () => {
               Digital<span className="text-accent">Nest</span> Admin
             </span>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => { signOut(); navigate("/admin"); }}>
+          <Button variant="ghost" size="sm" onClick={handleSignOut}>
             <LogOut className="w-4 h-4 mr-1" /> Sign out
           </Button>
         </div>
@@ -204,13 +202,11 @@ const Dashboard = () => {
                 </div>
                 <div className="space-y-2">
                   <Label>Digital File</Label>
-                  <div className="flex items-center gap-2">
-                    <label className="flex items-center gap-2 cursor-pointer border border-input rounded-md px-3 py-2 text-sm hover:bg-accent/10 transition-colors">
-                      <Upload className="w-4 h-4" />
-                      {file ? file.name : "Choose file"}
-                      <input type="file" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                    </label>
-                  </div>
+                  <label className="flex items-center gap-2 cursor-pointer border border-input rounded-md px-3 py-2 text-sm hover:bg-accent/10 transition-colors">
+                    <Upload className="w-4 h-4" />
+                    {file ? file.name : "Choose file"}
+                    <input type="file" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+                  </label>
                 </div>
                 <Button className="w-full" onClick={handleSave} disabled={saving}>
                   {saving ? "Saving…" : editingId ? "Update Product" : "Create Product"}
