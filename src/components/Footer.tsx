@@ -1,56 +1,90 @@
 import { Link } from "react-router-dom";
+import { Instagram, Twitter, Facebook, Mail } from "lucide-react";
+
+const quickLinks = [
+  { to: "/", label: "Home" },
+  { to: "/courses", label: "Courses" },
+  { to: "/templates", label: "Templates" },
+  { to: "/pdfs", label: "PDFs" },
+  { to: "/blog", label: "Blog" },
+  { to: "/contact", label: "Contact" },
+];
+
+const socialLinks = [
+  { icon: Instagram, href: "#", label: "Instagram" },
+  { icon: Twitter, href: "#", label: "Twitter/X" },
+  { icon: Facebook, href: "#", label: "Facebook" },
+];
 
 const Footer = () => (
-  <footer className="border-t border-border bg-primary py-12">
-    <div className="container grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div>
-        <h3 className="font-display text-lg font-bold text-primary-foreground mb-3">
-          Digital<span className="text-accent">Nest</span>
-        </h3>
-        <p className="text-sm text-primary-foreground/60 leading-relaxed">
-          Your one-stop shop for PDFs, courses, templates & more.
-        </p>
-      </div>
-      <div>
-        <h4 className="font-body text-xs font-semibold text-primary-foreground/80 mb-3 uppercase tracking-wider">Products</h4>
-        <div className="space-y-2">
-          {[
-            { to: "/courses", label: "Courses" },
-            { to: "/templates", label: "Templates" },
-            { to: "/pdfs", label: "PDFs" },
-          ].map((link) => (
-            <Link key={link.to} to={link.to} className="block text-sm text-primary-foreground/50 hover:text-accent transition-colors">
-              {link.label}
-            </Link>
-          ))}
+  <footer className="border-t border-border bg-primary">
+    <div className="container py-12">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* Left — Logo & tagline */}
+        <div className="space-y-3">
+          <h3 className="font-display text-xl font-bold text-primary-foreground">
+            Digital<span className="text-accent">Nest</span>
+          </h3>
+          <p className="text-sm text-primary-foreground/60 leading-relaxed">
+            Your one-stop digital shop
+          </p>
         </div>
-      </div>
-      <div>
-        <h4 className="font-body text-xs font-semibold text-primary-foreground/80 mb-3 uppercase tracking-wider">Company</h4>
-        <div className="space-y-2">
-          {[
-            { to: "/about", label: "About" },
-            { to: "/blog", label: "Blog" },
-            { to: "/contact", label: "Contact" },
-          ].map((link) => (
-            <Link key={link.to} to={link.to} className="block text-sm text-primary-foreground/50 hover:text-accent transition-colors">
-              {link.label}
-            </Link>
-          ))}
+
+        {/* Middle — Quick Links */}
+        <div>
+          <h4 className="font-body text-xs font-semibold text-primary-foreground/80 mb-4 uppercase tracking-wider">
+            Quick Links
+          </h4>
+          <div className="grid grid-cols-2 gap-2">
+            {quickLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="text-sm text-primary-foreground/50 hover:text-accent transition-colors"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
-      <div>
-        <h4 className="font-body text-xs font-semibold text-primary-foreground/80 mb-3 uppercase tracking-wider">Stay Connected</h4>
-        <p className="text-sm text-primary-foreground/50">Follow us for tips and new releases.</p>
-        <div className="flex gap-4 mt-3">
-          {["Twitter", "Instagram", "YouTube"].map((s) => (
-            <span key={s} className="text-xs text-primary-foreground/40 hover:text-accent cursor-pointer transition-colors">{s}</span>
-          ))}
+
+        {/* Right — Contact & Socials */}
+        <div className="space-y-4">
+          <h4 className="font-body text-xs font-semibold text-primary-foreground/80 mb-4 uppercase tracking-wider">
+            Get in Touch
+          </h4>
+          <a
+            href="mailto:hello@digitalnest.com"
+            className="flex items-center gap-2 text-sm text-primary-foreground/50 hover:text-accent transition-colors"
+          >
+            <Mail size={16} />
+            hello@digitalnest.com
+          </a>
+          <div className="flex gap-4 mt-2">
+            {socialLinks.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                aria-label={social.label}
+                className="p-2 rounded-full border border-primary-foreground/10 text-primary-foreground/50 hover:text-accent hover:border-accent transition-colors"
+              >
+                <social.icon size={18} />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
-    <div className="container mt-8 pt-6 border-t border-primary-foreground/10">
-      <p className="text-xs text-primary-foreground/30 text-center">© 2026 DigitalNest. All rights reserved.</p>
+
+    {/* Bottom bar */}
+    <div className="border-t border-primary-foreground/10">
+      <div className="container py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-primary-foreground/30">
+        <p>© 2026 DigitalNest. All rights reserved.</p>
+        <div className="flex gap-4">
+          <Link to="/privacy" className="hover:text-accent transition-colors">Privacy Policy</Link>
+          <Link to="/refund" className="hover:text-accent transition-colors">Refund Policy</Link>
+        </div>
+      </div>
     </div>
   </footer>
 );
