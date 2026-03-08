@@ -39,14 +39,14 @@ const FreeResourcesSection = () => {
           {freebies.map((item) => (
             <div
               key={item.title}
-              className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-6 flex items-start gap-4 hover:border-accent/40 transition-colors"
+              className="bg-card border border-border rounded-lg p-6 flex items-start gap-4 hover:border-accent/40 transition-colors"
             >
-              <div className="p-2 rounded-md bg-accent/20 text-accent shrink-0">
+              <div className="p-2 rounded-md bg-accent/10 text-accent shrink-0">
                 <item.icon size={22} />
               </div>
               <div>
-                <h3 className="font-body text-sm font-semibold text-primary-foreground">{item.title}</h3>
-                <p className="text-xs text-primary-foreground/60 mt-1 leading-relaxed">{item.description}</p>
+                <h3 className="font-body text-sm font-semibold text-foreground">{item.title}</h3>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}
