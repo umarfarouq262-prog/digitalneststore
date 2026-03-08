@@ -5,24 +5,30 @@ import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Star, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
-import { getProductBySlug } from "@/lib/products";
-
-// Static image imports
-import productPdf from "@/assets/product-pdf.jpg";
-import productCourse from "@/assets/product-course.jpg";
-import productTemplate from "@/assets/product-template.jpg";
-
-const imageMap: Record<string, string> = {
-  "product-pdf": productPdf,
-  "product-course": productCourse,
-  "product-template": productTemplate,
-};
+import { useProductBySlug } from "@/hooks/useProducts";
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { addItem } = useCart();
+  const { product, isLoading } = useProductBySlug(slug);
 
-  const product = slug ? getProductBySlug(slug) : undefined;
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container py-20">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-muted rounded-xl animate-pulse aspect-[3/4]" />
+            <div className="space-y-4">
+              <div className="h-6 bg-muted rounded animate-pulse w-1/3" />
+              <div className="h-10 bg-muted rounded animate-pulse w-2/3" />
+              <div className="h-4 bg-muted rounded animate-pulse w-full" />
+              <div className="h-4 bg-muted rounded animate-pulse w-full" />
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!product) {
     return (
@@ -40,25 +46,27 @@ const ProductDetail = () => {
     );
   }
 
-  const imageSrc = imageMap[product.image] || productPdf;
+  const imageSrc = product.image_url || "/placeholder.svg";
 
   const handleAddToCart = () => {
     addItem({
       image: imageSrc,
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      priceNum: product.priceNum,
+      title: product.name,
+      description: product.description || "",
+      price: `$${Number(product.price).toFixed(0)}`,
+      priceNum: Number(product.price),
       category: product.category,
     });
-    toast.success(`${product.title} added to cart`);
+    toast.success(`${product.name} added to cart`);
   };
+
+  // Split description into paragraphs for display
+  const paragraphs = (product.description || "").split("\n").filter(Boolean);
 
   return (
     <Layout>
       <section className="py-12 md:py-20">
         <div className="container">
-          {/* Back link */}
           <Link
             to="/products"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8 font-body"
@@ -71,14 +79,12 @@ const ProductDetail = () => {
             <div className="relative rounded-xl overflow-hidden border border-border bg-muted">
               <img
                 src={imageSrc}
-                alt={product.title}
+                alt={product.name}
                 className="w-full aspect-[3/4] object-cover"
               />
-              {product.tag && (
-                <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground text-sm px-3 py-1">
-                  {product.tag}
-                </Badge>
-              )}
+              <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground text-sm px-3 py-1">
+                {product.category}
+              </Badge>
             </div>
 
             {/* Details */}
@@ -88,34 +94,32 @@ const ProductDetail = () => {
                   {product.category}
                 </span>
                 <h1 className="font-display text-3xl md:text-4xl font-bold text-foreground">
-                  {product.title}
+                  {product.name}
                 </h1>
                 <div className="flex items-center gap-2">
                   <div className="flex gap-0.5">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        size={16}
-                        className={i < product.rating ? "fill-accent text-accent" : "text-border"}
-                      />
+                      <Star key={i} size={16} className="fill-accent text-accent" />
                     ))}
                   </div>
-                  <span className="text-sm text-muted-foreground font-body">
-                    ({product.rating}.0)
-                  </span>
+                  <span className="text-sm text-muted-foreground font-body">(5.0)</span>
                 </div>
               </div>
 
               <p className="font-display text-4xl font-bold text-foreground">
-                {product.price}
+                ${Number(product.price).toFixed(2)}
               </p>
 
               <div className="space-y-3">
-                {product.longDescription.split("\n\n").map((paragraph, i) => (
-                  <p key={i} className="text-muted-foreground leading-relaxed font-body">
-                    {paragraph}
+                {paragraphs.length > 0 ? (
+                  paragraphs.map((p, i) => (
+                    <p key={i} className="text-muted-foreground leading-relaxed font-body">{p}</p>
+                  ))
+                ) : (
+                  <p className="text-muted-foreground leading-relaxed font-body">
+                    A premium digital product to help you grow and succeed.
                   </p>
-                ))}
+                )}
               </div>
 
               {/* Benefits */}
@@ -124,7 +128,12 @@ const ProductDetail = () => {
                   What You'll Get
                 </h3>
                 <ul className="space-y-2.5">
-                  {product.benefits.map((benefit, i) => (
+                  {[
+                    "Instant digital download after purchase",
+                    "Lifetime access with free updates",
+                    "Professional quality content",
+                    "30-day money-back guarantee",
+                  ].map((benefit, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-0.5" />
                       <span className="text-muted-foreground font-body">{benefit}</span>
@@ -141,11 +150,10 @@ const ProductDetail = () => {
                   onClick={handleAddToCart}
                 >
                   <ShoppingCart size={18} />
-                  Add to Cart — {product.price}
+                  Add to Cart — ${Number(product.price).toFixed(0)}
                 </Button>
               </div>
 
-              {/* Trust badges */}
               <div className="flex flex-wrap gap-4 pt-2 text-xs text-muted-foreground font-body">
                 <span>✓ Instant download</span>
                 <span>✓ Lifetime access</span>
