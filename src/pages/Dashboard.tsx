@@ -21,7 +21,7 @@ interface Product {
   created_at: string;
 }
 
-const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "" };
+const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", file_url: "" };
 
 const adminApi = async (body: Record<string, unknown>) => {
   const token = sessionStorage.getItem("admin_token");
@@ -103,6 +103,7 @@ const Dashboard = () => {
         old_price: form.old_price ? parseFloat(form.old_price) : null,
         category: form.category,
         image_url: form.image_url || null,
+        file_url: form.file_url || null,
       });
       toast.success(editingId ? "Product updated" : "Product created");
       setDialogOpen(false);
@@ -149,6 +150,7 @@ const Dashboard = () => {
       old_price: p.old_price ? String(p.old_price) : "",
       category: p.category,
       image_url: p.image_url || "",
+      file_url: p.file_url || "",
     });
     setEditingId(p.id);
     setDialogOpen(true);
