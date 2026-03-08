@@ -18,6 +18,7 @@ export const slugify = (text: string) =>
   text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 export const useProducts = () => {
+  const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
