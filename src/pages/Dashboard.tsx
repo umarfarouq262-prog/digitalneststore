@@ -202,6 +202,8 @@ const Dashboard = () => {
           products={products}
           onEdit={openEdit}
           onDelete={handleDelete}
+          deleteConfirmId={deleteConfirmId}
+          setDeleteConfirmId={setDeleteConfirmId}
         />
       </main>
     </div>
