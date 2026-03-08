@@ -59,7 +59,7 @@ const FreeResourcesSection = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="flex-1 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40"
+            className="flex-1 bg-card border-border"
           />
           <Button type="submit" className="bg-accent text-accent-foreground hover:bg-accent/90 glow-orange-sm">
             Get Free Access
