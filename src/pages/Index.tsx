@@ -204,7 +204,7 @@ const Index = () => {
 
       <FreeResourcesSection />
 
-      <NewsletterSection />
+      
 
       <FAQSection />
 
