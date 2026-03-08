@@ -21,16 +21,16 @@ const FreeResourcesSection = () => {
   };
 
   return (
-    <section className="py-20" style={{ background: 'hsl(217, 71%, 53%)' }}>
+    <section className="bg-secondary py-20">
       <div className="container">
         <div className="text-center mb-12">
-          <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-primary-foreground/70 mb-2">
+          <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-accent mb-2">
             Free Resources
           </span>
-          <h2 className="font-display text-3xl font-bold text-primary-foreground">
+          <h2 className="font-display text-3xl font-bold text-foreground">
             Get Free Templates & <span className="text-accent glow-orange-text">Guides</span>
           </h2>
-          <p className="text-primary-foreground/70 mt-2 font-body max-w-md mx-auto">
+          <p className="text-muted-foreground mt-2 font-body max-w-md mx-auto">
             Enter your email and instantly receive our most popular starter resources — completely free.
           </p>
         </div>
@@ -39,14 +39,14 @@ const FreeResourcesSection = () => {
           {freebies.map((item) => (
             <div
               key={item.title}
-              className="bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg p-6 flex items-start gap-4 hover:border-accent/40 transition-colors"
+              className="bg-card border border-border rounded-lg p-6 flex items-start gap-4 hover:border-accent/40 transition-colors"
             >
-              <div className="p-2 rounded-md bg-accent/20 text-accent shrink-0">
+              <div className="p-2 rounded-md bg-accent/10 text-accent shrink-0">
                 <item.icon size={22} />
               </div>
               <div>
-                <h3 className="font-body text-sm font-semibold text-primary-foreground">{item.title}</h3>
-                <p className="text-xs text-primary-foreground/60 mt-1 leading-relaxed">{item.description}</p>
+                <h3 className="font-body text-sm font-semibold text-foreground">{item.title}</h3>
+                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.description}</p>
               </div>
             </div>
           ))}
@@ -59,7 +59,7 @@ const FreeResourcesSection = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="flex-1 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/40"
+            className="flex-1 bg-card border-border"
           />
           <Button type="submit" className="bg-accent text-accent-foreground hover:bg-accent/90 glow-orange-sm">
             Get Free Access
