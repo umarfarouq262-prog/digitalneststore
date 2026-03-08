@@ -12,6 +12,7 @@ import Blog from "./pages/Blog";
 import Cart from "./pages/Cart";
 import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
+import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/templates" element={<ProductsPage defaultCategory="Template" title="Templates" subtitle="Ready-to-use templates for docs, social media, and more." />} />
             <Route path="/pdfs" element={<ProductsPage defaultCategory="PDF" title="PDFs & Guides" subtitle="Expertly crafted PDFs, checklists, and workbooks." />} />
             <Route path="/products" element={<ProductsPage />} />
+            <Route path="/product/:slug" element={<ProductDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/blog" element={<Blog />} />

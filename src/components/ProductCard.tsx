@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Star, ShoppingCart } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import { slugify } from "@/lib/products";
 
 interface ProductCardProps {
   image: string;
@@ -29,28 +31,34 @@ const ProductCard = ({ image, title, description, price, tag, category, rating =
     toast.success(`${title} added to cart`);
   };
 
+  const productSlug = slugify(title);
+
   return (
     <div className="group bg-card rounded-lg border border-border overflow-hidden transition-all hover:glow-orange hover:border-accent/30 animate-fade-in">
-      <div className="aspect-[3/4] overflow-hidden bg-muted relative">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-        />
-        {tag && (
-          <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-body font-semibold px-2.5 py-1 rounded-full">
-            {tag}
-          </span>
-        )}
-      </div>
+      <Link to={`/product/${productSlug}`} className="block">
+        <div className="aspect-[3/4] overflow-hidden bg-muted relative">
+          <img
+            src={image}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+          />
+          {tag && (
+            <span className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs font-body font-semibold px-2.5 py-1 rounded-full">
+              {tag}
+            </span>
+          )}
+        </div>
+      </Link>
       <div className="p-5 space-y-2.5">
         {category && (
           <span className="text-xs font-body font-medium uppercase tracking-wider text-muted-foreground">
             {category}
           </span>
         )}
-        <h3 className="font-display text-lg font-semibold text-card-foreground">{title}</h3>
+        <Link to={`/product/${productSlug}`} className="hover:text-accent transition-colors">
+          <h3 className="font-display text-lg font-semibold text-card-foreground">{title}</h3>
+        </Link>
         <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         <div className="flex gap-0.5 pt-1">
           {Array.from({ length: 5 }).map((_, i) => (
