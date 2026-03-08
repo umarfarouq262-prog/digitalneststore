@@ -1,11 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { useState } from "react";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/products", label: "Products" },
-  { to: "/about", label: "About" },
+  { to: "/courses", label: "Courses" },
+  { to: "/templates", label: "Templates" },
+  { to: "/pdfs", label: "PDFs" },
   { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact" },
 ];
@@ -17,12 +18,14 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container flex items-center justify-between h-16">
-        <Link to="/" className="font-display text-xl font-bold tracking-tight text-foreground">
-          DigiShelf
+        <Link to="/" className="flex items-center gap-2">
+          <span className="font-display text-xl font-bold tracking-tight text-foreground">
+            Digital<span className="text-accent">Nest</span>
+          </span>
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-7">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -36,9 +39,15 @@ const Navbar = () => {
           ))}
         </div>
 
+        <div className="hidden lg:flex items-center gap-3">
+          <button className="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="Search">
+            <Search size={18} />
+          </button>
+        </div>
+
         {/* Mobile toggle */}
         <button
-          className="md:hidden text-foreground"
+          className="lg:hidden text-foreground"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
         >
@@ -48,13 +57,13 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden border-t border-border bg-background px-6 py-4 space-y-3">
+        <div className="lg:hidden border-t border-border bg-background px-6 py-4 space-y-3">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
               onClick={() => setOpen(false)}
-              className={`block text-sm font-body font-medium ${
+              className={`block text-sm font-body font-medium py-1 ${
                 location.pathname === link.to ? "text-accent" : "text-muted-foreground"
               }`}
             >

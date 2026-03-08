@@ -11,9 +11,9 @@ const About = () => (
   <Layout>
     <section className="py-16">
       <div className="container max-w-3xl">
-        <h1 className="font-display text-4xl font-bold text-foreground text-center">About DigiShelf</h1>
+        <h1 className="font-display text-4xl font-bold text-foreground text-center">About DigitalNest</h1>
         <p className="text-muted-foreground mt-6 font-body text-lg leading-relaxed text-center">
-          We believe that the right knowledge, delivered beautifully, can change everything. DigiShelf was founded to make premium digital learning accessible, practical, and inspiring.
+          We believe that the right knowledge, delivered beautifully, can change everything. DigitalNest was founded to make premium digital learning accessible, practical, and inspiring for creators and professionals everywhere.
         </p>
 
         <div className="grid sm:grid-cols-3 gap-8 mt-16">
@@ -31,7 +31,7 @@ const About = () => (
         <div className="mt-16 border-t border-border pt-12">
           <h2 className="font-display text-2xl font-bold text-foreground text-center mb-4">Our Mission</h2>
           <p className="text-muted-foreground font-body leading-relaxed text-center">
-            To empower individuals and teams with actionable insights packed into beautifully crafted digital products. We're not about fluff — every page is designed to deliver real, measurable value.
+            To empower individuals and teams with actionable insights packed into beautifully crafted digital products. We're not about fluff — every page, module, and template is designed to deliver real, measurable value.
           </p>
         </div>
       </div>
