@@ -81,8 +81,8 @@ export default {
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "orange-glow-pulse": {
-          "0%, 100%": { opacity: "0.3", transform: "scale(1)" },
-          "50%": { opacity: "0.7", transform: "scale(1.05)" },
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "1" },
         },
       },
       animation: {
