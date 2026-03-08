@@ -1,25 +1,10 @@
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import { useState } from "react";
-import productEbook from "@/assets/product-ebook.jpg";
-import productPdf from "@/assets/product-pdf.jpg";
-import productCourse from "@/assets/product-course.jpg";
-import productTemplate from "@/assets/product-template.jpg";
+import { useProducts } from "@/hooks/useProducts";
 
 type Category = "All" | "PDF" | "Course" | "Template" | "Tool";
 type SortBy = "popular" | "price-low" | "price-high" | "newest";
-
-const allProducts = [
-  { image: productPdf, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy.", price: "$19", priceNum: 19, tag: "Bestseller", category: "PDF" as const, rating: 5 },
-  { image: productCourse, title: "Marketing Mastery Course", description: "12-module video course with worksheets for digital marketing.", price: "$49", priceNum: 49, tag: "New", category: "Course" as const, rating: 5 },
-  { image: productTemplate, title: "Productivity Blueprint Kit", description: "Templates, checklists, and systems to 10x your output.", price: "$14", priceNum: 14, tag: "Popular", category: "Template" as const, rating: 4 },
-  { image: productPdf, title: "Leadership Essentials PDF", description: "Core principles every leader needs to inspire teams.", price: "$17", priceNum: 17, category: "PDF" as const, rating: 4 },
-  { image: productCourse, title: "Social Media Playbook", description: "Step-by-step strategies to grow your audience organically.", price: "$21", priceNum: 21, category: "Course" as const, rating: 5 },
-  { image: productTemplate, title: "Freelancer's Toolkit", description: "Everything you need to launch your freelance career.", price: "$12", priceNum: 12, category: "Template" as const, rating: 4 },
-  { image: productPdf, title: "SEO Checklist Pro", description: "A complete SEO audit checklist for any website.", price: "$9", priceNum: 9, tag: "Free Sample", category: "PDF" as const, rating: 5 },
-  { image: productCourse, title: "Video Editing Masterclass", description: "From beginner to pro in 8 comprehensive modules.", price: "$59", priceNum: 59, category: "Course" as const, rating: 5 },
-  { image: productTemplate, title: "Social Media Templates Pack", description: "50+ ready-to-use templates for Instagram, LinkedIn & more.", price: "$24", priceNum: 24, category: "Template" as const, rating: 5 },
-];
 
 const categories: Category[] = ["All", "PDF", "Course", "Template", "Tool"];
 
@@ -32,12 +17,14 @@ interface ProductsPageProps {
 const ProductsPage = ({ defaultCategory = "All", title = "All Products", subtitle = "Browse our full collection of expertly crafted digital products." }: ProductsPageProps) => {
   const [activeCategory, setActiveCategory] = useState<Category>(defaultCategory);
   const [sortBy, setSortBy] = useState<SortBy>("popular");
+  const { data: products, isLoading } = useProducts();
 
-  const filtered = allProducts
+  const filtered = (products ?? [])
     .filter((p) => activeCategory === "All" || p.category === activeCategory)
     .sort((a, b) => {
-      if (sortBy === "price-low") return a.priceNum - b.priceNum;
-      if (sortBy === "price-high") return b.priceNum - a.priceNum;
+      if (sortBy === "price-low") return a.price - b.price;
+      if (sortBy === "price-high") return b.price - a.price;
+      if (sortBy === "newest") return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       return 0;
     });
 
@@ -79,12 +66,27 @@ const ProductsPage = ({ defaultCategory = "All", title = "All Products", subtitl
             </select>
           </div>
 
-          {filtered.length === 0 ? (
+          {isLoading ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-card rounded-lg border border-border animate-pulse h-96" />
+              ))}
+            </div>
+          ) : filtered.length === 0 ? (
             <p className="text-center text-muted-foreground py-12">No products found in this category yet.</p>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {filtered.map((p) => (
-                <ProductCard key={p.title} {...p} />
+                <ProductCard
+                  key={p.id}
+                  image={p.image_url || "/placeholder.svg"}
+                  title={p.name}
+                  description={p.description || ""}
+                  price={`$${Number(p.price).toFixed(0)}`}
+                  priceNum={Number(p.price)}
+                  category={p.category}
+                  rating={5}
+                />
               ))}
             </div>
           )}

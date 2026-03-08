@@ -8,15 +8,10 @@ import TestimonialCard from "@/components/TestimonialCard";
 import CategoryCard from "@/components/CategoryCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import NewsletterSection from "@/components/NewsletterSection";
+import { useProducts, slugify } from "@/hooks/useProducts";
 import heroImage from "@/assets/hero-digitalnest.jpg";
 import heroLearning from "@/assets/hero-learning.jpg";
 import heroTemplates from "@/assets/hero-templates.jpg";
-import productPdf from "@/assets/product-pdf.jpg";
-import productCourse from "@/assets/product-course.jpg";
-import productTemplate from "@/assets/product-template.jpg";
-import productStrategy from "@/assets/product-strategy.jpg";
-import productSocial from "@/assets/product-social.jpg";
-import productFinance from "@/assets/product-finance.jpg";
 import iconPdf from "@/assets/icon-pdf.png";
 import iconCourse from "@/assets/icon-course.png";
 import iconTemplate from "@/assets/icon-template.png";
@@ -53,15 +48,6 @@ const categories = [
   { image: iconTools, title: "Tools & Plugins", description: "Digital utilities for pros", to: "/pdfs", count: 5 },
 ];
 
-const featuredProducts = [
-  { image: productPdf, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy and growth frameworks.", price: "$19", tag: "Bestseller", category: "PDF", rating: 5 },
-  { image: productCourse, title: "Marketing Mastery Course", description: "12-module video course with worksheets to master digital marketing.", price: "$49", tag: "New", category: "Course", rating: 5 },
-  { image: productTemplate, title: "Productivity Blueprint Kit", description: "Templates, checklists and systems to 10x your daily output.", price: "$14", tag: "Popular", category: "Template", rating: 4 },
-  { image: productStrategy, title: "Business Strategy Playbook", description: "Step-by-step frameworks for building and scaling your business from scratch.", price: "$29", tag: "Trending", category: "PDF", rating: 5 },
-  { image: productSocial, title: "Social Media Template Pack", description: "50+ ready-to-post Instagram, TikTok, and LinkedIn templates.", price: "$24", tag: "Hot", category: "Template", rating: 5 },
-  { image: productFinance, title: "Finance Tracker Toolkit", description: "Budget planners, expense trackers, and financial dashboards in one bundle.", price: "$17", tag: "Essential", category: "Tool", rating: 4 },
-];
-
 const testimonials = [
   { quote: "These guides completely transformed how I approach my business. The templates alone saved me 20+ hours.", name: "Sarah Chen", role: "Founder, Bloom Studio", rating: 5 },
   { quote: "The course content is world-class. Better than programs costing 10x more. Your download is ready instantly!", name: "Marcus Johnson", role: "Marketing Director", rating: 5 },
@@ -93,7 +79,7 @@ const HeroCarousel = () => {
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-6 glow-orange-sm">
-              <Link to="/courses">Browse Products</Link>
+              <Link to="/products">Browse Products</Link>
             </Button>
             <Button asChild variant="outline" className="border-foreground/20">
               <Link to="/about">Start Learning</Link>
@@ -107,7 +93,6 @@ const HeroCarousel = () => {
             alt="Premium digital products"
             className="rounded-xl shadow-xl w-full object-cover aspect-square"
           />
-          {/* Carousel controls */}
           <div className="absolute bottom-4 right-4 flex items-center gap-2">
             <button
               onClick={() => setCurrent((c) => (c - 1 + heroSlides.length) % heroSlides.length)}
@@ -124,7 +109,6 @@ const HeroCarousel = () => {
               <ChevronRight size={18} />
             </button>
           </div>
-          {/* Dots */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
             {heroSlides.map((_, i) => (
               <button
@@ -141,74 +125,96 @@ const HeroCarousel = () => {
   );
 };
 
-const Index = () => (
-  <Layout>
-    <HeroCarousel />
+const Index = () => {
+  const { data: products, isLoading } = useProducts();
+  const featured = products?.slice(0, 6) ?? [];
 
-    {/* Categories */}
-    <section className="bg-secondary py-20">
-      <div className="container">
-        <h2 className="font-display text-3xl font-bold text-foreground text-center">Browse by Category</h2>
-        <p className="text-muted-foreground text-center mt-2 font-body">Find exactly what you need</p>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-          {categories.map((cat) => (
-            <CategoryCard key={cat.title} {...cat} />
-          ))}
-        </div>
-      </div>
-    </section>
+  return (
+    <Layout>
+      <HeroCarousel />
 
-    {/* Featured Products */}
-    <section className="py-20">
-      <div className="container">
-        <div className="text-center mb-12">
-          <h2 className="font-display text-3xl font-bold text-foreground">Featured Products</h2>
-          <p className="text-muted-foreground mt-2 font-body">Our most loved digital resources</p>
+      {/* Categories */}
+      <section className="bg-secondary py-20">
+        <div className="container">
+          <h2 className="font-display text-3xl font-bold text-foreground text-center">Browse by Category</h2>
+          <p className="text-muted-foreground text-center mt-2 font-body">Find exactly what you need</p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+            {categories.map((cat) => (
+              <CategoryCard key={cat.title} {...cat} />
+            ))}
+          </div>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProducts.map((p) => (
-            <ProductCard key={p.title} {...p} />
-          ))}
+      </section>
+
+      {/* Featured Products */}
+      <section className="py-20">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-3xl font-bold text-foreground">Featured Products</h2>
+            <p className="text-muted-foreground mt-2 font-body">Our most loved digital resources</p>
+          </div>
+          {isLoading ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-card rounded-lg border border-border animate-pulse h-96" />
+              ))}
+            </div>
+          ) : featured.length === 0 ? (
+            <p className="text-center text-muted-foreground py-12 font-body">No products available yet. Check back soon!</p>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featured.map((p) => (
+                <ProductCard
+                  key={p.id}
+                  image={p.image_url || "/placeholder.svg"}
+                  title={p.name}
+                  description={p.description || ""}
+                  price={`$${Number(p.price).toFixed(0)}`}
+                  priceNum={Number(p.price)}
+                  category={p.category}
+                  rating={5}
+                />
+              ))}
+            </div>
+          )}
+          <div className="text-center mt-10">
+            <Button asChild variant="outline">
+              <Link to="/products">View All Products</Link>
+            </Button>
+          </div>
         </div>
-        <div className="text-center mt-10">
-          <Button asChild variant="outline">
-            <Link to="/courses">View All Products</Link>
+      </section>
+
+      <WhyChooseUs />
+
+      {/* Testimonials */}
+      <section className="bg-secondary py-20">
+        <div className="container">
+          <h2 className="font-display text-3xl font-bold text-foreground text-center mb-12">What Our Customers Say</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((t) => (
+              <TestimonialCard key={t.name} {...t} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <NewsletterSection />
+
+      {/* CTA */}
+      <section className="bg-primary py-16">
+        <div className="container text-center space-y-5">
+          <h2 className="font-display text-3xl font-bold text-primary-foreground">Ready to level up?</h2>
+          <p className="text-primary-foreground/60 font-body max-w-lg mx-auto">
+            Join thousands of creators who've already transformed their skills with our digital products.
+          </p>
+          <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-8">
+            <Link to="/products">Get Started</Link>
           </Button>
         </div>
-      </div>
-    </section>
-
-    {/* Why Choose Us */}
-    <WhyChooseUs />
-
-    {/* Testimonials */}
-    <section className="bg-secondary py-20">
-      <div className="container">
-        <h2 className="font-display text-3xl font-bold text-foreground text-center mb-12">What Our Customers Say</h2>
-        <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t) => (
-            <TestimonialCard key={t.name} {...t} />
-          ))}
-        </div>
-      </div>
-    </section>
-
-    {/* Newsletter */}
-    <NewsletterSection />
-
-    {/* CTA */}
-    <section className="bg-primary py-16">
-      <div className="container text-center space-y-5">
-        <h2 className="font-display text-3xl font-bold text-primary-foreground">Ready to level up?</h2>
-        <p className="text-primary-foreground/60 font-body max-w-lg mx-auto">
-          Join thousands of creators who've already transformed their skills with our digital products.
-        </p>
-        <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-8">
-          <Link to="/courses">Get Started</Link>
-        </Button>
-      </div>
-    </section>
-  </Layout>
-);
+      </section>
+    </Layout>
+  );
+};
 
 export default Index;
