@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X, Search, ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import { useCart } from "@/contexts/CartContext";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -14,6 +15,7 @@ const navLinks = [
 const Navbar = () => {
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const { totalItems } = useCart();
 
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -43,16 +45,42 @@ const Navbar = () => {
           <button className="p-2 text-muted-foreground hover:text-foreground transition-colors" aria-label="Search">
             <Search size={18} />
           </button>
+          <Link
+            to="/cart"
+            className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Cart"
+          >
+            <ShoppingCart size={18} />
+            {totalItems > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 bg-accent text-accent-foreground text-[10px] font-body font-bold w-4.5 h-4.5 flex items-center justify-center rounded-full min-w-[18px] min-h-[18px]">
+                {totalItems}
+              </span>
+            )}
+          </Link>
         </div>
 
         {/* Mobile toggle */}
-        <button
-          className="lg:hidden text-foreground"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="flex lg:hidden items-center gap-2">
+          <Link
+            to="/cart"
+            className="relative p-2 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Cart"
+          >
+            <ShoppingCart size={20} />
+            {totalItems > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 bg-accent text-accent-foreground text-[10px] font-body font-bold min-w-[18px] min-h-[18px] flex items-center justify-center rounded-full">
+                {totalItems}
+              </span>
+            )}
+          </Link>
+          <button
+            className="text-foreground"
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
