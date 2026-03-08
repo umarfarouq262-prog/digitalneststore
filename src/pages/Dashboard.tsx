@@ -23,13 +23,14 @@ interface Product {
   name: string;
   description: string | null;
   price: number;
+  old_price: number | null;
   image_url: string | null;
   file_url: string | null;
   category: string;
   created_at: string;
 }
 
-const emptyForm = { name: "", description: "", price: "", category: "PDF", image_url: "" };
+const emptyForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "" };
 
 // Secure API helper — every call includes the admin token
 const adminApi = async (body: Record<string, unknown>) => {
