@@ -118,6 +118,7 @@ const Dashboard = () => {
       name: p.name,
       description: p.description || "",
       price: String(p.price),
+      old_price: p.old_price ? String(p.old_price) : "",
       category: p.category,
       image_url: p.image_url || "",
     });
