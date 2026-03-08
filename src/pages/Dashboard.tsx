@@ -110,6 +110,12 @@ const Dashboard = () => {
       fetchProducts();
       fetchAnalytics();
     } catch (err: any) {
+      if (err.message === "Unauthorized") {
+        sessionStorage.removeItem("admin_token");
+        toast.error("Session expired. Please sign in again");
+        navigate("/admin");
+        return;
+      }
       toast.error(err.message);
     }
     setSaving(false);
@@ -125,6 +131,12 @@ const Dashboard = () => {
       fetchProducts();
       fetchAnalytics();
     } catch (err: any) {
+      if (err.message === "Unauthorized") {
+        sessionStorage.removeItem("admin_token");
+        toast.error("Session expired. Please sign in again");
+        navigate("/admin");
+        return;
+      }
       toast.error(err.message);
     }
   };

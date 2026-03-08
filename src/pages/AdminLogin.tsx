@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,16 +11,26 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+
+    const formPassword = (e.currentTarget.elements.namedItem("password") as HTMLInputElement | null)?.value ?? "";
+    const rawPassword = password || formPassword || passwordRef.current?.value || "";
+
+    if (!rawPassword) {
+      setError("Password is required");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke("admin-api", {
-        body: { action: "login", password },
+        body: { action: "login", password: rawPassword },
       });
 
       if (fnError || !data?.success) {
@@ -30,6 +40,7 @@ const AdminLogin = () => {
       }
 
       sessionStorage.setItem("admin_token", data.token);
+      setPassword("");
       navigate("/dashboard");
     } catch {
       setError("Something went wrong");
@@ -61,11 +72,14 @@ const AdminLogin = () => {
               <Label htmlFor="password" className="text-foreground">Password</Label>
               <Input
                 id="password"
+                name="password"
                 type="password"
+                ref={passwordRef}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
+                autoComplete="current-password"
                 placeholder="••••••••"
-                required
                 autoFocus
               />
             </div>
