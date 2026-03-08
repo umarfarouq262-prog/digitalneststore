@@ -1,29 +1,39 @@
-import { Hono } from "https://deno.land/x/hono@v4.3.11/mod.ts";
-
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const app = new Hono();
-
-app.options("/*", (c) => c.json(null, 200, corsHeaders));
-
-app.post("/", async (c) => {
-  const { password } = await c.req.json();
-  const adminPassword = Deno.env.get("ADMIN_PASSWORD");
-
-  if (!adminPassword) {
-    return c.json({ error: "Admin password not configured" }, 500, corsHeaders);
+Deno.serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
   }
 
-  if (password === adminPassword) {
-    // Generate a simple session token
-    const token = crypto.randomUUID();
-    return c.json({ success: true, token }, 200, corsHeaders);
-  }
+  try {
+    const { password } = await req.json();
+    const adminPassword = Deno.env.get("ADMIN_PASSWORD");
 
-  return c.json({ error: "Invalid password" }, 401, corsHeaders);
+    if (!adminPassword) {
+      return new Response(JSON.stringify({ error: "Admin password not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    if (password === adminPassword) {
+      const token = crypto.randomUUID();
+      return new Response(JSON.stringify({ success: true, token }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    return new Response(JSON.stringify({ error: "Invalid password" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch {
+    return new Response(JSON.stringify({ error: "Bad request" }), {
+      status: 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 });
-
-Deno.serve(app.fetch);
