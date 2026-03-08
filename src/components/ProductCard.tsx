@@ -67,7 +67,12 @@ const ProductCard = ({ image, title, description, price, oldPrice, tag, category
           ))}
         </div>
         <div className="flex items-center justify-between pt-2">
-          <span className="font-display text-xl font-bold text-foreground">{price}</span>
+          <div className="flex items-center gap-2">
+            <span className="font-display text-xl font-bold text-foreground">{price}</span>
+            {oldPrice && (
+              <span className="font-display text-sm text-muted-foreground line-through">{oldPrice}</span>
+            )}
+          </div>
           <Button
             variant="default"
             size="sm"
