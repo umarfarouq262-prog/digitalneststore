@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
 
     // --- CREATE PRODUCT ---
     if (action === "create") {
-      const { name, description, price, category, image_url, file_url } = body;
+      const { name, description, price, old_price, category, image_url, file_url } = body;
       if (!name || price === undefined) {
         return jsonResponse({ error: "Name and price are required" }, 400);
       }
@@ -84,6 +84,7 @@ Deno.serve(async (req) => {
         name: String(name).slice(0, 200),
         description: description ? String(description).slice(0, 2000) : null,
         price: Number(price),
+        old_price: old_price ? Number(old_price) : null,
         category: ["PDF", "Course", "Template", "Tool"].includes(category) ? category : "PDF",
         image_url: image_url ? String(image_url).slice(0, 1000) : null,
         file_url: file_url ? String(file_url) : null,
