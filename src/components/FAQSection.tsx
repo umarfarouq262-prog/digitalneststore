@@ -29,22 +29,23 @@ const faqs = [
 ];
 
 const FAQSection = () => (
-  <section className="bg-primary py-20">
+  <section className="bg-background py-20">
     <div className="container max-w-3xl">
-      <h2 className="font-display text-3xl font-bold text-primary-foreground text-center mb-12">
-        Frequently Asked Questions
+      <h2 className="font-display text-3xl font-bold text-foreground text-center mb-2">
+        Frequently Asked <span className="text-accent glow-orange-text">Questions</span>
       </h2>
+      <p className="text-muted-foreground text-center mb-12 font-body">Everything you need to know</p>
       <Accordion type="single" collapsible className="space-y-3">
         {faqs.map((faq, i) => (
           <AccordionItem
             key={i}
             value={`faq-${i}`}
-            className="border border-primary-foreground/10 rounded-lg px-6 bg-primary-foreground/5"
+            className="border border-accent/20 rounded-lg px-6 bg-card shadow-[0_0_15px_-3px_hsl(var(--accent)/0.15)]"
           >
-            <AccordionTrigger className="text-sm font-semibold text-primary-foreground hover:text-accent [&[data-state=open]]:text-accent">
+            <AccordionTrigger className="text-sm font-semibold text-foreground hover:text-accent [&[data-state=open]]:text-accent">
               {faq.q}
             </AccordionTrigger>
-            <AccordionContent className="text-sm text-primary-foreground/60 leading-relaxed">
+            <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
               {faq.a}
             </AccordionContent>
           </AccordionItem>
