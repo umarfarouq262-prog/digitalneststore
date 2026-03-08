@@ -103,6 +103,7 @@ const Dashboard = () => {
         old_price: form.old_price ? parseFloat(form.old_price) : null,
         category: form.category,
         image_url: form.image_url || null,
+        file_url: form.file_url || null,
       });
       toast.success(editingId ? "Product updated" : "Product created");
       setDialogOpen(false);
