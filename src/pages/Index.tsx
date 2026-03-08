@@ -49,9 +49,9 @@ const categories = [
 ];
 
 const testimonials = [
-  { quote: "These guides completely transformed how I approach my business. The templates alone saved me 20+ hours.", name: "Sarah Chen", role: "Founder, Bloom Studio", rating: 5 },
-  { quote: "The course content is world-class. Better than programs costing 10x more. Your download is ready instantly!", name: "Marcus Johnson", role: "Marketing Director", rating: 5 },
-  { quote: "I've bought dozens of digital products — DigitalNest's are in a league of their own. Highly curated.", name: "Aisha Patel", role: "Freelance Consultant", rating: 5 },
+  { quote: "Bought the marketing course bundle and it was worth every penny. Easy to follow and actually useful.", name: "David Mensah", role: "Digital Marketer", rating: 5 },
+  { quote: "Instant download worked perfectly. Got my files within seconds of paying. Very smooth experience.", name: "Fatima Bello", role: "Freelancer", rating: 5 },
+  { quote: "Good quality templates. I've bought from other sites before and DigitalNest is better value for money.", name: "Kevin Adeyemi", role: "Entrepreneur", rating: 4 },
 ];
 
 const HeroCarousel = () => {
