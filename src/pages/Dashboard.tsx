@@ -150,6 +150,7 @@ const Dashboard = () => {
       old_price: p.old_price ? String(p.old_price) : "",
       category: p.category,
       image_url: p.image_url || "",
+      file_url: p.file_url || "",
     });
     setEditingId(p.id);
     setDialogOpen(true);
