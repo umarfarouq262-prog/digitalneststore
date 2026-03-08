@@ -21,7 +21,7 @@ interface Product {
   created_at: string;
 }
 
-const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "" };
+const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", file_url: "" };
 
 const adminApi = async (body: Record<string, unknown>) => {
   const token = sessionStorage.getItem("admin_token");
