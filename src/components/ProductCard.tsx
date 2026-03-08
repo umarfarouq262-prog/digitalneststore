@@ -56,7 +56,9 @@ const ProductCard = ({ image, title, description, price, tag, category, rating =
             {category}
           </span>
         )}
-        <h3 className="font-display text-lg font-semibold text-card-foreground">{title}</h3>
+        <Link to={`/product/${productSlug}`} className="hover:text-accent transition-colors">
+          <h3 className="font-display text-lg font-semibold text-card-foreground">{title}</h3>
+        </Link>
         <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         <div className="flex gap-0.5 pt-1">
           {Array.from({ length: 5 }).map((_, i) => (
