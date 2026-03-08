@@ -203,6 +203,8 @@ const Index = () => {
 
       <NewsletterSection />
 
+      <FAQSection />
+
       {/* CTA */}
       <section className="bg-primary py-16">
         <div className="container text-center space-y-5">
