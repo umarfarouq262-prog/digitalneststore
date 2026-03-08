@@ -12,7 +12,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ image, title, description, price, tag, category, rating = 5 }: ProductCardProps) => (
-  <div className="group bg-card rounded-lg border border-border overflow-hidden transition-all hover:shadow-lg hover:border-accent/30 animate-fade-in">
+  <div className="group bg-card rounded-lg border border-border overflow-hidden transition-all hover:glow-orange hover:border-accent/30 animate-fade-in">
     <div className="aspect-[3/4] overflow-hidden bg-muted relative">
       <img
         src={image}

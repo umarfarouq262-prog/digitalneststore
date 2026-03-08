@@ -42,13 +42,13 @@ const Index = () => (
         <div className="space-y-6 animate-fade-in">
           <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-accent">Your one-stop digital shop</span>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
-            Unlock Premium Digital Resources <span className="text-accent">Instantly</span>
+            Unlock Premium Digital Resources <span className="text-accent glow-orange-text">Instantly</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-md leading-relaxed font-body">
             PDFs, Courses, Templates, and Tools for Creators & Professionals. Download and start learning in seconds.
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
-            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-6">
+            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-6 glow-orange-sm">
               <Link to="/courses">Browse Products</Link>
             </Button>
             <Button asChild variant="outline" className="border-foreground/20">
