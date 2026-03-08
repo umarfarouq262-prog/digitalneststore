@@ -21,7 +21,7 @@ const FreeResourcesSection = () => {
   };
 
   return (
-    <section className="bg-secondary py-20">
+    <section className="bg-primary py-20">
       <div className="container">
         <div className="text-center mb-12">
           <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-accent mb-2">
