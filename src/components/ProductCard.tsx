@@ -10,13 +10,14 @@ interface ProductCardProps {
   title: string;
   description: string;
   price: string;
+  oldPrice?: string;
   priceNum?: number;
   tag?: string;
   category?: string;
   rating?: number;
 }
 
-const ProductCard = ({ image, title, description, price, tag, category, rating = 5, priceNum }: ProductCardProps) => {
+const ProductCard = ({ image, title, description, price, oldPrice, tag, category, rating = 5, priceNum }: ProductCardProps) => {
   const { addItem } = useCart();
 
   const handleAddToCart = () => {
