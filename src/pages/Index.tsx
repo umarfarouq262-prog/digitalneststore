@@ -202,7 +202,7 @@ const Index = () => {
         </div>
       </section>
 
-      
+      <FreeResourcesSection />
 
       <NewsletterSection />
 
