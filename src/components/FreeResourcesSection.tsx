@@ -24,13 +24,13 @@ const FreeResourcesSection = () => {
     <section className="bg-secondary py-20">
       <div className="container">
         <div className="text-center mb-12">
-          <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-primary-foreground/70 mb-2">
+          <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-accent mb-2">
             Free Resources
           </span>
-          <h2 className="font-display text-3xl font-bold text-primary-foreground">
+          <h2 className="font-display text-3xl font-bold text-foreground">
             Get Free Templates & <span className="text-accent glow-orange-text">Guides</span>
           </h2>
-          <p className="text-primary-foreground/70 mt-2 font-body max-w-md mx-auto">
+          <p className="text-muted-foreground mt-2 font-body max-w-md mx-auto">
             Enter your email and instantly receive our most popular starter resources — completely free.
           </p>
         </div>
