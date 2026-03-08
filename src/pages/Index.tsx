@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import TestimonialCard from "@/components/TestimonialCard";
+import FAQSection from "@/components/FAQSection";
 import CategoryCard from "@/components/CategoryCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import NewsletterSection from "@/components/NewsletterSection";
@@ -201,6 +202,8 @@ const Index = () => {
       </section>
 
       <NewsletterSection />
+
+      <FAQSection />
 
       {/* CTA */}
       <section className="bg-primary py-16">
