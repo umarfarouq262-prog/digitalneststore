@@ -115,11 +115,13 @@ const Dashboard = () => {
     setSaving(false);
   };
 
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this product?")) return;
     try {
       await adminApi({ action: "delete", id });
       toast.success("Deleted");
+      setDeleteConfirmId(null);
       fetchProducts();
       fetchAnalytics();
     } catch (err: any) {
@@ -200,6 +202,8 @@ const Dashboard = () => {
           products={products}
           onEdit={openEdit}
           onDelete={handleDelete}
+          deleteConfirmId={deleteConfirmId}
+          setDeleteConfirmId={setDeleteConfirmId}
         />
       </main>
     </div>
