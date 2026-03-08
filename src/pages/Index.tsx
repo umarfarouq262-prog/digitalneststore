@@ -206,13 +206,16 @@ const Index = () => {
       <FAQSection />
 
       {/* CTA */}
-      <section className="bg-primary py-16">
-        <div className="container text-center space-y-5">
-          <h2 className="font-display text-3xl font-bold text-primary-foreground">Ready to level up?</h2>
-          <p className="text-primary-foreground/60 font-body max-w-lg mx-auto">
+      <section className="bg-background py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.12)_0%,_transparent_70%)]" />
+        <div className="container text-center space-y-5 relative z-10">
+          <h2 className="font-display text-3xl font-bold text-foreground">
+            Ready to <span className="text-accent glow-orange-text">level up?</span>
+          </h2>
+          <p className="text-muted-foreground font-body max-w-lg mx-auto">
             Join thousands of creators who've already transformed their skills with our digital products.
           </p>
-          <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-8">
+          <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 glow-orange-sm">
             <Link to="/products">Get Started</Link>
           </Button>
         </div>
