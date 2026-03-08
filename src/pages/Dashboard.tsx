@@ -174,10 +174,14 @@ const Dashboard = () => {
                   <Label>Description</Label>
                   <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Short description" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label>Price ($)</Label>
                     <Input type="number" step="0.01" min="0" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="9.99" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Old Price ($)</Label>
+                    <Input type="number" step="0.01" min="0" value={form.old_price} onChange={(e) => setForm({ ...form, old_price: e.target.value })} placeholder="19.99" />
                   </div>
                   <div className="space-y-2">
                     <Label>Category</Label>
