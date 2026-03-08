@@ -12,6 +12,7 @@ import Blog from "./pages/Blog";
 import Cart from "./pages/Cart";
 import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
+import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
