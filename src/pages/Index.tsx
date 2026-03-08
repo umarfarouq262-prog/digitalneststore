@@ -7,9 +7,9 @@ import CategoryCard from "@/components/CategoryCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import NewsletterSection from "@/components/NewsletterSection";
 import heroImage from "@/assets/hero-digitalnest.jpg";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
+import productPdf from "@/assets/product-pdf.jpg";
+import productCourse from "@/assets/product-course.jpg";
+import productTemplate from "@/assets/product-template.jpg";
 import iconPdf from "@/assets/icon-pdf.png";
 import iconCourse from "@/assets/icon-course.png";
 import iconTemplate from "@/assets/icon-template.png";
@@ -23,9 +23,9 @@ const categories = [
 ];
 
 const featuredProducts = [
-  { image: product1, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy and growth frameworks.", price: "$19", tag: "Bestseller", category: "PDF", rating: 5 },
-  { image: product2, title: "Marketing Mastery Course", description: "12-module video course with worksheets to master digital marketing.", price: "$49", tag: "New", category: "Course", rating: 5 },
-  { image: product3, title: "Productivity Blueprint Kit", description: "Templates, checklists and systems to 10x your daily output.", price: "$14", tag: "Popular", category: "Template", rating: 4 },
+  { image: productPdf, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy and growth frameworks.", price: "$19", tag: "Bestseller", category: "PDF", rating: 5 },
+  { image: productCourse, title: "Marketing Mastery Course", description: "12-module video course with worksheets to master digital marketing.", price: "$49", tag: "New", category: "Course", rating: 5 },
+  { image: productTemplate, title: "Productivity Blueprint Kit", description: "Templates, checklists and systems to 10x your daily output.", price: "$14", tag: "Popular", category: "Template", rating: 4 },
 ];
 
 const testimonials = [
