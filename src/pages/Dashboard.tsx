@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -31,14 +31,36 @@ interface Product {
 
 const emptyForm = { name: "", description: "", price: "", category: "PDF", image_url: "" };
 
+// Secure API helper — every call includes the admin token
+const adminApi = async (body: Record<string, unknown>) => {
+  const token = sessionStorage.getItem("admin_token");
+  const { data, error } = await supabase.functions.invoke("admin-api", {
+    body: { ...body, token },
+  });
+  if (error) throw new Error(error.message);
+  if (data?.error) throw new Error(data.error);
+  return data;
+};
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+
+  const fetchProducts = useCallback(async () => {
+    try {
+      const data = await adminApi({ action: "list" });
+      if (data.products) setProducts(data.products);
+    } catch (err: any) {
+      if (err.message === "Unauthorized") {
+        sessionStorage.removeItem("admin_token");
+        navigate("/admin");
+      }
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const token = sessionStorage.getItem("admin_token");
@@ -47,29 +69,7 @@ const Dashboard = () => {
       return;
     }
     fetchProducts();
-  }, [navigate]);
-
-  const fetchProducts = async () => {
-    const { data } = await supabase
-      .from("products")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (data) setProducts(data);
-  };
-
-  const uploadFile = async (file: File): Promise<string | null> => {
-    const ext = file.name.split(".").pop();
-    const path = `${crypto.randomUUID()}.${ext}`;
-    const { error } = await supabase.storage
-      .from("digital-products")
-      .upload(path, file);
-    if (error) {
-      toast.error("File upload failed: " + error.message);
-      return null;
-    }
-    const { data } = supabase.storage.from("digital-products").getPublicUrl(path);
-    return data.publicUrl;
-  };
+  }, [navigate, fetchProducts]);
 
   const handleSave = async () => {
     if (!form.name || !form.price) {
@@ -78,42 +78,37 @@ const Dashboard = () => {
     }
     setSaving(true);
 
-    let fileUrl: string | null = null;
-    if (file) {
-      fileUrl = await uploadFile(file);
-      if (!fileUrl) { setSaving(false); return; }
+    try {
+      const payload = {
+        action: editingId ? "update" : "create",
+        ...(editingId ? { id: editingId } : {}),
+        name: form.name,
+        description: form.description || null,
+        price: parseFloat(form.price),
+        category: form.category,
+        image_url: form.image_url || null,
+      };
+
+      await adminApi(payload);
+      toast.success(editingId ? "Product updated" : "Product created");
+      setDialogOpen(false);
+      resetForm();
+      fetchProducts();
+    } catch (err: any) {
+      toast.error(err.message);
     }
-
-    const payload = {
-      name: form.name,
-      description: form.description || null,
-      price: parseFloat(form.price),
-      category: form.category,
-      image_url: form.image_url || null,
-      ...(fileUrl ? { file_url: fileUrl } : {}),
-    };
-
-    if (editingId) {
-      const { error } = await supabase.from("products").update(payload).eq("id", editingId);
-      if (error) toast.error(error.message);
-      else toast.success("Product updated");
-    } else {
-      const { error } = await supabase.from("products").insert(payload);
-      if (error) toast.error(error.message);
-      else toast.success("Product created");
-    }
-
     setSaving(false);
-    setDialogOpen(false);
-    resetForm();
-    fetchProducts();
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this product?")) return;
-    const { error } = await supabase.from("products").delete().eq("id", id);
-    if (error) toast.error(error.message);
-    else { toast.success("Deleted"); fetchProducts(); }
+    try {
+      await adminApi({ action: "delete", id });
+      toast.success("Deleted");
+      fetchProducts();
+    } catch (err: any) {
+      toast.error(err.message);
+    }
   };
 
   const openEdit = (p: Product) => {
@@ -125,14 +120,12 @@ const Dashboard = () => {
       image_url: p.image_url || "",
     });
     setEditingId(p.id);
-    setFile(null);
     setDialogOpen(true);
   };
 
   const resetForm = () => {
     setForm(emptyForm);
     setEditingId(null);
-    setFile(null);
   };
 
   const handleSignOut = () => {
@@ -200,14 +193,6 @@ const Dashboard = () => {
                   <Label>Image URL</Label>
                   <Input value={form.image_url} onChange={(e) => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
                 </div>
-                <div className="space-y-2">
-                  <Label>Digital File</Label>
-                  <label className="flex items-center gap-2 cursor-pointer border border-input rounded-md px-3 py-2 text-sm hover:bg-accent/10 transition-colors">
-                    <Upload className="w-4 h-4" />
-                    {file ? file.name : "Choose file"}
-                    <input type="file" className="hidden" onChange={(e) => setFile(e.target.files?.[0] || null)} />
-                  </label>
-                </div>
                 <Button className="w-full" onClick={handleSave} disabled={saving}>
                   {saving ? "Saving…" : editingId ? "Update Product" : "Create Product"}
                 </Button>
@@ -229,7 +214,6 @@ const Dashboard = () => {
                     <TableHead>Name</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Price</TableHead>
-                    <TableHead>File</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -239,15 +223,6 @@ const Dashboard = () => {
                       <TableCell className="font-medium">{p.name}</TableCell>
                       <TableCell>{p.category}</TableCell>
                       <TableCell>${Number(p.price).toFixed(2)}</TableCell>
-                      <TableCell>
-                        {p.file_url ? (
-                          <a href={p.file_url} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline text-sm">
-                            Download
-                          </a>
-                        ) : (
-                          <span className="text-muted-foreground text-sm">—</span>
-                        )}
-                      </TableCell>
                       <TableCell className="text-right space-x-1">
                         <Button variant="ghost" size="icon" onClick={() => openEdit(p)}>
                           <Pencil className="w-4 h-4" />
