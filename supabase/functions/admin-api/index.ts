@@ -95,12 +95,13 @@ Deno.serve(async (req) => {
 
     // --- UPDATE PRODUCT ---
     if (action === "update") {
-      const { id, name, description, price, category, image_url, file_url } = body;
+      const { id, name, description, price, old_price, category, image_url, file_url } = body;
       if (!id) return jsonResponse({ error: "Product ID required" }, 400);
       const payload: Record<string, unknown> = {};
       if (name !== undefined) payload.name = String(name).slice(0, 200);
       if (description !== undefined) payload.description = description ? String(description).slice(0, 2000) : null;
       if (price !== undefined) payload.price = Number(price);
+      if (old_price !== undefined) payload.old_price = old_price ? Number(old_price) : null;
       if (category !== undefined) payload.category = ["PDF", "Course", "Template", "Tool"].includes(category) ? category : "PDF";
       if (image_url !== undefined) payload.image_url = image_url ? String(image_url).slice(0, 1000) : null;
       if (file_url !== undefined) payload.file_url = file_url ? String(file_url) : null;
