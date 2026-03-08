@@ -146,18 +146,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const loadCart = async () => {
       if (user) {
         setLoading(true);
-        const cId = await getOrCreateCart(user.id);
-        setCartId(cId);
-        if (cId) {
-          const merged = await mergeGuestCart(cId);
-          if (merged) {
-            setItems(merged);
-          } else {
-            const dbItems = await loadDbCart(cId);
-            setItems(dbItems);
+        try {
+          const cId = await getOrCreateCart(user.id);
+          setCartId(cId);
+          if (cId) {
+            const merged = await mergeGuestCart(cId);
+            if (merged) {
+              setItems(merged);
+            } else {
+              const dbItems = await loadDbCart(cId);
+              setItems(dbItems);
+            }
           }
+        } catch (err) {
+          console.error("Failed to load cart:", err);
+        } finally {
+          setLoading(false);
         }
-        setLoading(false);
       } else {
         setCartId(null);
         setItems(loadGuestCart());
