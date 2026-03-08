@@ -86,6 +86,7 @@ const Dashboard = () => {
         name: form.name,
         description: form.description || null,
         price: parseFloat(form.price),
+        old_price: form.old_price ? parseFloat(form.old_price) : null,
         category: form.category,
         image_url: form.image_url || null,
       };
