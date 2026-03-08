@@ -23,9 +23,9 @@ const categories = [
 ];
 
 const featuredProducts = [
-  { image: product1, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy and growth frameworks.", price: "$19", tag: "Bestseller", category: "PDF", rating: 5 },
-  { image: product2, title: "Marketing Mastery Course", description: "12-module video course with worksheets to master digital marketing.", price: "$49", tag: "New", category: "Course", rating: 5 },
-  { image: product3, title: "Productivity Blueprint Kit", description: "Templates, checklists and systems to 10x your daily output.", price: "$14", tag: "Popular", category: "Template", rating: 4 },
+  { image: productPdf, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy and growth frameworks.", price: "$19", tag: "Bestseller", category: "PDF", rating: 5 },
+  { image: productCourse, title: "Marketing Mastery Course", description: "12-module video course with worksheets to master digital marketing.", price: "$49", tag: "New", category: "Course", rating: 5 },
+  { image: productTemplate, title: "Productivity Blueprint Kit", description: "Templates, checklists and systems to 10x your daily output.", price: "$14", tag: "Popular", category: "Template", rating: 4 },
 ];
 
 const testimonials = [

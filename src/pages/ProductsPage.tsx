@@ -10,15 +10,15 @@ type Category = "All" | "PDF" | "Course" | "Template" | "Tool";
 type SortBy = "popular" | "price-low" | "price-high" | "newest";
 
 const allProducts = [
-  { image: product1, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy.", price: "$19", priceNum: 19, tag: "Bestseller", category: "PDF" as const, rating: 5 },
-  { image: product2, title: "Marketing Mastery Course", description: "12-module video course with worksheets for digital marketing.", price: "$49", priceNum: 49, tag: "New", category: "Course" as const, rating: 5 },
-  { image: product3, title: "Productivity Blueprint Kit", description: "Templates, checklists, and systems to 10x your output.", price: "$14", priceNum: 14, tag: "Popular", category: "Template" as const, rating: 4 },
-  { image: product1, title: "Leadership Essentials PDF", description: "Core principles every leader needs to inspire teams.", price: "$17", priceNum: 17, category: "PDF" as const, rating: 4 },
-  { image: product2, title: "Social Media Playbook", description: "Step-by-step strategies to grow your audience organically.", price: "$21", priceNum: 21, category: "Course" as const, rating: 5 },
-  { image: product3, title: "Freelancer's Toolkit", description: "Everything you need to launch your freelance career.", price: "$12", priceNum: 12, category: "Template" as const, rating: 4 },
-  { image: product1, title: "SEO Checklist Pro", description: "A complete SEO audit checklist for any website.", price: "$9", priceNum: 9, tag: "Free Sample", category: "PDF" as const, rating: 5 },
-  { image: product2, title: "Video Editing Masterclass", description: "From beginner to pro in 8 comprehensive modules.", price: "$59", priceNum: 59, category: "Course" as const, rating: 5 },
-  { image: product3, title: "Social Media Templates Pack", description: "50+ ready-to-use templates for Instagram, LinkedIn & more.", price: "$24", priceNum: 24, category: "Template" as const, rating: 5 },
+  { image: productPdf, title: "The Ultimate Business Guide", description: "A comprehensive deep-dive into modern business strategy.", price: "$19", priceNum: 19, tag: "Bestseller", category: "PDF" as const, rating: 5 },
+  { image: productCourse, title: "Marketing Mastery Course", description: "12-module video course with worksheets for digital marketing.", price: "$49", priceNum: 49, tag: "New", category: "Course" as const, rating: 5 },
+  { image: productTemplate, title: "Productivity Blueprint Kit", description: "Templates, checklists, and systems to 10x your output.", price: "$14", priceNum: 14, tag: "Popular", category: "Template" as const, rating: 4 },
+  { image: productPdf, title: "Leadership Essentials PDF", description: "Core principles every leader needs to inspire teams.", price: "$17", priceNum: 17, category: "PDF" as const, rating: 4 },
+  { image: productCourse, title: "Social Media Playbook", description: "Step-by-step strategies to grow your audience organically.", price: "$21", priceNum: 21, category: "Course" as const, rating: 5 },
+  { image: productTemplate, title: "Freelancer's Toolkit", description: "Everything you need to launch your freelance career.", price: "$12", priceNum: 12, category: "Template" as const, rating: 4 },
+  { image: productPdf, title: "SEO Checklist Pro", description: "A complete SEO audit checklist for any website.", price: "$9", priceNum: 9, tag: "Free Sample", category: "PDF" as const, rating: 5 },
+  { image: productCourse, title: "Video Editing Masterclass", description: "From beginner to pro in 8 comprehensive modules.", price: "$59", priceNum: 59, category: "Course" as const, rating: 5 },
+  { image: productTemplate, title: "Social Media Templates Pack", description: "50+ ready-to-use templates for Instagram, LinkedIn & more.", price: "$24", priceNum: 24, category: "Template" as const, rating: 5 },
 ];
 
 const categories: Category[] = ["All", "PDF", "Course", "Template", "Tool"];
