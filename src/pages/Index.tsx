@@ -9,6 +9,7 @@ import FAQSection from "@/components/FAQSection";
 import CategoryCard from "@/components/CategoryCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import NewsletterSection from "@/components/NewsletterSection";
+import FreeResourcesSection from "@/components/FreeResourcesSection";
 import { useProducts, slugify } from "@/hooks/useProducts";
 import heroImage from "@/assets/hero-digitalnest.jpg";
 import heroLearning from "@/assets/hero-learning.jpg";
@@ -200,6 +201,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <FreeResourcesSection />
 
       <NewsletterSection />
 
