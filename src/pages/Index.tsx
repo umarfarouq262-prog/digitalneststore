@@ -68,8 +68,8 @@ const HeroCarousel = () => {
 
   return (
     <section className="relative overflow-hidden">
-      <div className="container grid md:grid-cols-2 gap-12 items-center py-20 md:py-28">
-        <div className="space-y-6 animate-fade-in" key={current}>
+      <div className="container grid md:grid-cols-2 gap-8 md:gap-12 items-center py-12 md:py-16">
+        <div className="space-y-5 animate-fade-in" key={current}>
           <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-accent">
             {slide.tagline}
           </span>
