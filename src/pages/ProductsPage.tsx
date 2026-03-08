@@ -1,9 +1,10 @@
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import { useState } from "react";
-import product1 from "@/assets/product-1.jpg";
-import product2 from "@/assets/product-2.jpg";
-import product3 from "@/assets/product-3.jpg";
+import productEbook from "@/assets/product-ebook.jpg";
+import productPdf from "@/assets/product-pdf.jpg";
+import productCourse from "@/assets/product-course.jpg";
+import productTemplate from "@/assets/product-template.jpg";
 
 type Category = "All" | "PDF" | "Course" | "Template" | "Tool";
 type SortBy = "popular" | "price-low" | "price-high" | "newest";
