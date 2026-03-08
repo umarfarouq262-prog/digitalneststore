@@ -21,7 +21,7 @@ const FreeResourcesSection = () => {
   };
 
   return (
-    <section className="py-20" style={{ background: 'hsl(217, 71%, 53%)' }}>
+    <section className="bg-secondary py-20">
       <div className="container">
         <div className="text-center mb-12">
           <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-primary-foreground/70 mb-2">
