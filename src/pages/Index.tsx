@@ -48,7 +48,7 @@ const Index = () => (
             PDFs, Courses, Templates, and Tools for Creators & Professionals. Download and start learning in seconds.
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
-            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-6">
+            <Button asChild className="bg-accent text-accent-foreground hover:bg-accent/90 px-6 glow-orange-sm">
               <Link to="/courses">Browse Products</Link>
             </Button>
             <Button asChild variant="outline" className="border-foreground/20">
