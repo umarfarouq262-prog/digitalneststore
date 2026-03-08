@@ -209,6 +209,7 @@ Deno.serve(async (req) => {
 
     return jsonResponse({ error: "Unknown action" }, 400);
   } catch (e) {
-    return jsonResponse({ error: "Bad request" }, 400);
+    console.error("admin-api error:", e);
+    return jsonResponse({ error: e instanceof Error ? e.message : "Bad request" }, 400);
   }
 });
