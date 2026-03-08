@@ -19,8 +19,8 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const { data, error: fnError } = await supabase.functions.invoke("verify-admin", {
-        body: { password },
+      const { data, error: fnError } = await supabase.functions.invoke("admin-api", {
+        body: { action: "login", password },
       });
 
       if (fnError || !data?.success) {
