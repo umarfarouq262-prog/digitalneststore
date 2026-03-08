@@ -133,6 +133,70 @@ Deno.serve(async (req) => {
       return jsonResponse({ path, publicUrl: urlData.publicUrl });
     }
 
+    // --- ANALYTICS ---
+    if (action === "analytics") {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      const since = thirtyDaysAgo.toISOString();
+
+      // Total unique visitors
+      const { data: pvAll } = await supabase
+        .from("page_views")
+        .select("visitor_id, created_at")
+        .gte("created_at", since);
+
+      const uniqueVisitors = new Set((pvAll || []).map((v: any) => v.visitor_id)).size;
+
+      // Visitors by day
+      const visitorByDay: Record<string, Set<string>> = {};
+      for (const pv of pvAll || []) {
+        const day = pv.created_at.slice(0, 10);
+        if (!visitorByDay[day]) visitorByDay[day] = new Set();
+        visitorByDay[day].add(pv.visitor_id);
+      }
+      const visitorData = Object.entries(visitorByDay)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([date, set]) => ({ date: date.slice(5), visitors: set.size }));
+
+      // Orders / sales
+      const { data: orders } = await supabase
+        .from("orders")
+        .select("quantity, total_price, created_at, product_id")
+        .gte("created_at", since);
+
+      const totalSales = (orders || []).reduce((s: number, o: any) => s + o.quantity, 0);
+      const totalRevenue = (orders || []).reduce((s: number, o: any) => s + Number(o.total_price), 0);
+
+      // Sales by day
+      const salesByDay: Record<string, { sales: number; revenue: number }> = {};
+      for (const o of orders || []) {
+        const day = o.created_at.slice(0, 10);
+        if (!salesByDay[day]) salesByDay[day] = { sales: 0, revenue: 0 };
+        salesByDay[day].sales += o.quantity;
+        salesByDay[day].revenue += Number(o.total_price);
+      }
+      const salesData = Object.entries(salesByDay)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([date, v]) => ({ date: date.slice(5), sales: v.sales, revenue: v.revenue }));
+
+      // Products by category
+      const { data: prods } = await supabase.from("products").select("category");
+      const catCount: Record<string, number> = {};
+      for (const p of prods || []) {
+        catCount[p.category] = (catCount[p.category] || 0) + 1;
+      }
+      const categoryData = Object.entries(catCount).map(([name, value]) => ({ name, value }));
+
+      return jsonResponse({
+        totalVisitors: uniqueVisitors,
+        totalSales,
+        totalRevenue,
+        visitorData,
+        salesData,
+        categoryData,
+      });
+    }
+
     return jsonResponse({ error: "Unknown action" }, 400);
   } catch (e) {
     return jsonResponse({ error: "Bad request" }, 400);
