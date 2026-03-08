@@ -115,9 +115,19 @@ Deno.serve(async (req) => {
     if (action === "delete") {
       const { id } = body;
       if (!id) return jsonResponse({ error: "Product ID required" }, 400);
-      const { error } = await supabase.from("products").delete().eq("id", id);
+
+      const { data, error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", String(id))
+        .select("id");
+
       if (error) return jsonResponse({ error: error.message }, 400);
-      return jsonResponse({ success: true });
+      if (!data || data.length === 0) {
+        return jsonResponse({ error: "Product not found or already deleted" }, 404);
+      }
+
+      return jsonResponse({ success: true, deletedId: data[0].id });
     }
 
     // --- UPLOAD URL (generate signed upload URL) ---
