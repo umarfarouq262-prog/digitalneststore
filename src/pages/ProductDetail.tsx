@@ -106,9 +106,16 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <p className="font-display text-4xl font-bold text-foreground">
-                ${Number(product.price).toFixed(2)}
-              </p>
+              <div className="flex items-center gap-3">
+                <p className="font-display text-4xl font-bold text-foreground">
+                  ${Number(product.price).toFixed(2)}
+                </p>
+                {product.old_price && (
+                  <p className="font-display text-2xl text-muted-foreground line-through">
+                    ${Number(product.old_price).toFixed(2)}
+                  </p>
+                )}
+              </div>
 
               <div className="space-y-3">
                 {paragraphs.length > 0 ? (

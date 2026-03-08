@@ -23,13 +23,14 @@ interface Product {
   name: string;
   description: string | null;
   price: number;
+  old_price: number | null;
   image_url: string | null;
   file_url: string | null;
   category: string;
   created_at: string;
 }
 
-const emptyForm = { name: "", description: "", price: "", category: "PDF", image_url: "" };
+const emptyForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "" };
 
 // Secure API helper — every call includes the admin token
 const adminApi = async (body: Record<string, unknown>) => {
@@ -85,6 +86,7 @@ const Dashboard = () => {
         name: form.name,
         description: form.description || null,
         price: parseFloat(form.price),
+        old_price: form.old_price ? parseFloat(form.old_price) : null,
         category: form.category,
         image_url: form.image_url || null,
       };
@@ -116,6 +118,7 @@ const Dashboard = () => {
       name: p.name,
       description: p.description || "",
       price: String(p.price),
+      old_price: p.old_price ? String(p.old_price) : "",
       category: p.category,
       image_url: p.image_url || "",
     });
@@ -171,10 +174,14 @@ const Dashboard = () => {
                   <Label>Description</Label>
                   <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Short description" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label>Price ($)</Label>
                     <Input type="number" step="0.01" min="0" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="9.99" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Old Price ($)</Label>
+                    <Input type="number" step="0.01" min="0" value={form.old_price} onChange={(e) => setForm({ ...form, old_price: e.target.value })} placeholder="19.99" />
                   </div>
                   <div className="space-y-2">
                     <Label>Category</Label>

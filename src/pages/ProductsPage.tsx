@@ -83,6 +83,7 @@ const ProductsPage = ({ defaultCategory = "All", title = "All Products", subtitl
                   title={p.name}
                   description={p.description || ""}
                   price={`$${Number(p.price).toFixed(0)}`}
+                  oldPrice={p.old_price ? `$${Number(p.old_price).toFixed(0)}` : undefined}
                   priceNum={Number(p.price)}
                   category={p.category}
                   rating={5}
