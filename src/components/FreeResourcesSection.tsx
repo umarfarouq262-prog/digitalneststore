@@ -21,8 +21,7 @@ const FreeResourcesSection = () => {
   };
 
   return (
-    <section className="bg-accent/10 py-20 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.15)_0%,_transparent_70%)]" />
+    <section className="bg-secondary py-20">
       <div className="container">
         <div className="text-center mb-12">
           <span className="inline-block text-xs font-body font-semibold uppercase tracking-widest text-accent mb-2">
