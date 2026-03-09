@@ -6,7 +6,7 @@ const quickLinks = [
   { to: "/courses", label: "Courses" },
   { to: "/templates", label: "Templates" },
   { to: "/pdfs", label: "PDFs" },
-  { to: "/blog", label: "Blog" },
+  { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
 
