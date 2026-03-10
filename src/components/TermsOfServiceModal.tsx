@@ -14,13 +14,10 @@ const TermsOfServiceModal = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem(TOS_KEY)) {
-      setOpen(true);
-    }
+    setOpen(true);
   }, []);
 
   const handleAgree = () => {
-    localStorage.setItem(TOS_KEY, "true");
     setOpen(false);
   };
 
@@ -56,8 +53,8 @@ const TermsOfServiceModal = () => {
           <p>Thank you for visiting Digital Nest!</p>
         </div>
         <DialogFooter>
-          <Button onClick={handleAgree} className="w-full">
-            I Agree
+          <Button onClick={handleAgree} className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+            Accept & Continue
           </Button>
         </DialogFooter>
       </DialogContent>
