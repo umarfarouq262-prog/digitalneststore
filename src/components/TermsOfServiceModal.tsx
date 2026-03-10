@@ -14,13 +14,10 @@ const TermsOfServiceModal = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem(TOS_KEY)) {
-      setOpen(true);
-    }
+    setOpen(true);
   }, []);
 
   const handleAgree = () => {
-    localStorage.setItem(TOS_KEY, "true");
     setOpen(false);
   };
 
