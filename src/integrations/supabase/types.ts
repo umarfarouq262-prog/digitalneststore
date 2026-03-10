@@ -135,6 +135,7 @@ export type Database = {
       }
       products: {
         Row: {
+          affiliate_url: string | null
           category: string
           created_at: string
           description: string | null
@@ -144,9 +145,11 @@ export type Database = {
           name: string
           old_price: number | null
           price: number
+          product_type: string
           updated_at: string
         }
         Insert: {
+          affiliate_url?: string | null
           category?: string
           created_at?: string
           description?: string | null
@@ -156,9 +159,11 @@ export type Database = {
           name: string
           old_price?: number | null
           price?: number
+          product_type?: string
           updated_at?: string
         }
         Update: {
+          affiliate_url?: string | null
           category?: string
           created_at?: string
           description?: string | null
@@ -168,6 +173,7 @@ export type Database = {
           name?: string
           old_price?: number | null
           price?: number
+          product_type?: string
           updated_at?: string
         }
         Relationships: []
