@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShoppingCart, Star, CheckCircle2, ArrowLeft } from "lucide-react";
+import { ShoppingCart, Star, CheckCircle2, ArrowLeft, ExternalLink } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import { useProductBySlug } from "@/hooks/useProducts";
@@ -47,6 +47,7 @@ const ProductDetail = () => {
   }
 
   const imageSrc = product.image_url || "/placeholder.svg";
+  const isAffiliate = product.product_type === "affiliate";
 
   const handleAddToCart = () => {
     addItem({
@@ -56,11 +57,18 @@ const ProductDetail = () => {
       price: `$${Number(product.price).toFixed(0)}`,
       priceNum: Number(product.price),
       category: product.category,
+      productType: product.product_type,
+      affiliateUrl: product.affiliate_url || undefined,
     });
     toast.success(`${product.name} added to cart`);
   };
 
-  // Split description into paragraphs for display
+  const handleBuyNow = () => {
+    if (product.affiliate_url) {
+      window.open(product.affiliate_url, "_blank", "noopener,noreferrer");
+    }
+  };
+
   const paragraphs = (product.description || "").split("\n").filter(Boolean);
 
   return (
@@ -85,6 +93,11 @@ const ProductDetail = () => {
               <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground text-sm px-3 py-1">
                 {product.category}
               </Badge>
+              {isAffiliate && (
+                <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm px-3 py-1">
+                  External Product
+                </Badge>
+              )}
             </div>
 
             {/* Details */}
@@ -135,12 +148,19 @@ const ProductDetail = () => {
                   What You'll Get
                 </h3>
                 <ul className="space-y-2.5">
-                  {[
-                    "Instant digital download after purchase",
-                    "Lifetime access with free updates",
-                    "Professional quality content",
-                    "30-day money-back guarantee",
-                  ].map((benefit, i) => (
+                  {(isAffiliate
+                    ? [
+                        "Redirected to the seller's page to complete purchase",
+                        "Product delivered by the external seller",
+                        "Support provided by the product creator",
+                      ]
+                    : [
+                        "Instant digital download after purchase",
+                        "Lifetime access with free updates",
+                        "Professional quality content",
+                        "30-day money-back guarantee",
+                      ]
+                  ).map((benefit, i) => (
                     <li key={i} className="flex items-start gap-3">
                       <CheckCircle2 className="w-5 h-5 text-accent shrink-0 mt-0.5" />
                       <span className="text-muted-foreground font-body">{benefit}</span>
@@ -151,20 +171,40 @@ const ProductDetail = () => {
 
               {/* CTA */}
               <div className="flex flex-wrap gap-4 pt-4">
-                <Button
-                  size="lg"
-                  className="bg-accent text-accent-foreground hover:bg-accent/90 gap-2 glow-orange-sm px-8"
-                  onClick={handleAddToCart}
-                >
-                  <ShoppingCart size={18} />
-                  Add to Cart — ${Number(product.price).toFixed(0)}
-                </Button>
+                {isAffiliate ? (
+                  <Button
+                    size="lg"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90 gap-2 glow-orange-sm px-8"
+                    onClick={handleBuyNow}
+                  >
+                    <ExternalLink size={18} />
+                    Buy Now — External Site
+                  </Button>
+                ) : (
+                  <Button
+                    size="lg"
+                    className="bg-accent text-accent-foreground hover:bg-accent/90 gap-2 glow-orange-sm px-8"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingCart size={18} />
+                    Add to Cart — ${Number(product.price).toFixed(0)}
+                  </Button>
+                )}
               </div>
 
               <div className="flex flex-wrap gap-4 pt-2 text-xs text-muted-foreground font-body">
-                <span>✓ Instant download</span>
-                <span>✓ Lifetime access</span>
-                <span>✓ Free updates</span>
+                {isAffiliate ? (
+                  <>
+                    <span>↗ External purchase</span>
+                    <span>✓ Trusted partner</span>
+                  </>
+                ) : (
+                  <>
+                    <span>✓ Instant download</span>
+                    <span>✓ Lifetime access</span>
+                    <span>✓ Free updates</span>
+                  </>
+                )}
               </div>
             </div>
           </div>
