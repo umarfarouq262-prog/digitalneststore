@@ -176,6 +176,8 @@ const Index = () => {
                   priceNum={Number(p.price)}
                   category={p.category}
                   rating={5}
+                  productType={p.product_type}
+                  affiliateUrl={p.affiliate_url || undefined}
                 />
               ))}
             </div>
