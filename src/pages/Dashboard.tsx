@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -19,9 +19,11 @@ interface Product {
   file_url: string | null;
   category: string;
   created_at: string;
+  product_type: string;
+  affiliate_url: string | null;
 }
 
-const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", file_url: "" };
+const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", file_url: "", product_type: "my_product", affiliate_url: "" };
 
 const adminApi = async (body: Record<string, unknown>) => {
   const token = sessionStorage.getItem("admin_token");
@@ -41,7 +43,6 @@ const Dashboard = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Analytics state
   const [totalVisitors, setTotalVisitors] = useState(0);
   const [totalSales, setTotalSales] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -92,6 +93,10 @@ const Dashboard = () => {
       toast.error("Name and price are required");
       return;
     }
+    if (form.product_type === "affiliate" && !form.affiliate_url) {
+      toast.error("Affiliate URL is required for affiliate products");
+      return;
+    }
     setSaving(true);
     try {
       await adminApi({
@@ -103,7 +108,9 @@ const Dashboard = () => {
         old_price: form.old_price ? parseFloat(form.old_price) : null,
         category: form.category,
         image_url: form.image_url || null,
-        file_url: form.file_url || null,
+        file_url: form.product_type === "my_product" ? (form.file_url || null) : null,
+        product_type: form.product_type,
+        affiliate_url: form.product_type === "affiliate" ? (form.affiliate_url || null) : null,
       });
       toast.success(editingId ? "Product updated" : "Product created");
       setDialogOpen(false);
@@ -151,6 +158,8 @@ const Dashboard = () => {
       category: p.category,
       image_url: p.image_url || "",
       file_url: p.file_url || "",
+      product_type: p.product_type || "my_product",
+      affiliate_url: p.affiliate_url || "",
     });
     setEditingId(p.id);
     setDialogOpen(true);

@@ -12,6 +12,8 @@ export interface Product {
   file_url: string | null;
   category: string;
   created_at: string;
+  product_type: string;
+  affiliate_url: string | null;
 }
 
 export const slugify = (text: string) =>
@@ -31,7 +33,6 @@ export const useProducts = () => {
     },
   });
 
-  // Subscribe to realtime changes so dashboard edits auto-update the site
   useEffect(() => {
     const channel = supabase
       .channel("products-realtime")
