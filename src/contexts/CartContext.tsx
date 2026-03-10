@@ -11,6 +11,8 @@ export interface CartItem {
   category?: string;
   quantity: number;
   productId?: string;
+  productType?: string;
+  affiliateUrl?: string;
 }
 
 interface CartContextType {
@@ -34,7 +36,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cartId, setCartId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Load guest cart from localStorage
   const loadGuestCart = useCallback((): CartItem[] => {
     try {
       const stored = localStorage.getItem(GUEST_CART_KEY);
@@ -48,7 +49,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem(GUEST_CART_KEY, JSON.stringify(cartItems));
   }, []);
 
-  // Get or create cart for logged-in user
   const getOrCreateCart = useCallback(async (userId: string): Promise<string | null> => {
     const { data: existing } = await supabase
       .from("carts")
@@ -67,7 +67,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return created?.id ?? null;
   }, []);
 
-  // Load cart items from DB
   const loadDbCart = useCallback(async (cId: string): Promise<CartItem[]> => {
     const { data } = await supabase
       .from("cart_items")
@@ -85,17 +84,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       priceNum: Number(item.products?.price || 0),
       category: item.products?.category,
       quantity: item.quantity,
+      productType: item.products?.product_type || "my_product",
+      affiliateUrl: item.products?.affiliate_url || null,
     }));
   }, []);
 
-  // Sync cart items to DB
   const syncToDb = useCallback(async (cId: string, cartItems: CartItem[]) => {
-    // Clear existing items
     await supabase.from("cart_items").delete().eq("cart_id", cId);
 
     if (cartItems.length === 0) return;
 
-    // We need product IDs — look them up by name
     const { data: products } = await supabase
       .from("products")
       .select("id, name")
@@ -118,14 +116,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  // Merge guest cart into DB cart
   const mergeGuestCart = useCallback(async (cId: string) => {
     const guestItems = loadGuestCart();
     if (guestItems.length === 0) return;
 
     const dbItems = await loadDbCart(cId);
 
-    // Merge: add guest items that aren't in DB
     const merged = [...dbItems];
     for (const guest of guestItems) {
       const existing = merged.find(m => m.title === guest.title);
@@ -141,7 +137,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return merged;
   }, [loadGuestCart, loadDbCart, syncToDb]);
 
-  // Effect: load cart on auth change
   useEffect(() => {
     const loadCart = async () => {
       if (user) {
