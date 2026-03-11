@@ -142,6 +142,8 @@ export type Database = {
           file_url: string | null
           id: string
           image_url: string | null
+          image_url_2: string | null
+          image_url_3: string | null
           name: string
           old_price: number | null
           price: number
@@ -156,6 +158,8 @@ export type Database = {
           file_url?: string | null
           id?: string
           image_url?: string | null
+          image_url_2?: string | null
+          image_url_3?: string | null
           name: string
           old_price?: number | null
           price?: number
@@ -170,6 +174,8 @@ export type Database = {
           file_url?: string | null
           id?: string
           image_url?: string | null
+          image_url_2?: string | null
+          image_url_3?: string | null
           name?: string
           old_price?: number | null
           price?: number
