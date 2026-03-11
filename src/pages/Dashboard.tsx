@@ -108,6 +108,8 @@ const Dashboard = () => {
         old_price: form.old_price ? parseFloat(form.old_price) : null,
         category: form.category,
         image_url: form.image_url || null,
+        image_url_2: form.image_url_2 || null,
+        image_url_3: form.image_url_3 || null,
         file_url: form.product_type === "my_product" ? (form.file_url || null) : null,
         product_type: form.product_type,
         affiliate_url: form.product_type === "affiliate" ? (form.affiliate_url || null) : null,
