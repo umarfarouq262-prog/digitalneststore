@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useProductBySlug } from "@/hooks/useProducts";
 
 const ProductDetail = () => {
+  const [selectedImage, setSelectedImage] = useState(0);
   const { slug } = useParams<{ slug: string }>();
   const { addItem } = useCart();
   const { product, isLoading } = useProductBySlug(slug);
