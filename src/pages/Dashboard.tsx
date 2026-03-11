@@ -16,6 +16,8 @@ interface Product {
   price: number;
   old_price: number | null;
   image_url: string | null;
+  image_url_2: string | null;
+  image_url_3: string | null;
   file_url: string | null;
   category: string;
   created_at: string;
@@ -23,7 +25,7 @@ interface Product {
   affiliate_url: string | null;
 }
 
-const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", file_url: "", product_type: "my_product", affiliate_url: "" };
+const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", image_url_2: "", image_url_3: "", file_url: "", product_type: "my_product", affiliate_url: "" };
 
 const adminApi = async (body: Record<string, unknown>) => {
   const token = sessionStorage.getItem("admin_token");
@@ -108,6 +110,8 @@ const Dashboard = () => {
         old_price: form.old_price ? parseFloat(form.old_price) : null,
         category: form.category,
         image_url: form.image_url || null,
+        image_url_2: form.image_url_2 || null,
+        image_url_3: form.image_url_3 || null,
         file_url: form.product_type === "my_product" ? (form.file_url || null) : null,
         product_type: form.product_type,
         affiliate_url: form.product_type === "affiliate" ? (form.affiliate_url || null) : null,
@@ -157,6 +161,8 @@ const Dashboard = () => {
       old_price: p.old_price ? String(p.old_price) : "",
       category: p.category,
       image_url: p.image_url || "",
+      image_url_2: p.image_url_2 || "",
+      image_url_3: p.image_url_3 || "",
       file_url: p.file_url || "",
       product_type: p.product_type || "my_product",
       affiliate_url: p.affiliate_url || "",

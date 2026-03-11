@@ -20,6 +20,8 @@ export interface ProductForm {
   old_price: string;
   category: string;
   image_url: string;
+  image_url_2: string;
+  image_url_3: string;
   file_url?: string;
   product_type: "my_product" | "affiliate";
   affiliate_url?: string;
@@ -37,9 +39,9 @@ interface ProductDialogProps {
 }
 
 const ProductDialog = ({ open, onOpenChange, form, setForm, editingId, saving, onSave, onReset }: ProductDialogProps) => {
-  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState<number | null>(null);
   const [uploadingFile, setUploadingFile] = useState(false);
-  const imageInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const uploadToStorage = async (file: File, prefix: string) => {
@@ -51,22 +53,24 @@ const ProductDialog = ({ open, onOpenChange, form, setForm, editingId, saving, o
     return data.publicUrl;
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const imageFields: Array<"image_url" | "image_url_2" | "image_url_3"> = ["image_url", "image_url_2", "image_url_3"];
+
+  const handleImageUpload = (index: number) => async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
       return;
     }
-    setUploadingImage(true);
+    setUploadingImage(index);
     try {
       const url = await uploadToStorage(file, "images");
-      setForm({ ...form, image_url: url });
+      setForm({ ...form, [imageFields[index]]: url });
       toast.success("Image uploaded");
     } catch (err: any) {
       toast.error("Image upload failed: " + err.message);
     }
-    setUploadingImage(false);
+    setUploadingImage(null);
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +86,8 @@ const ProductDialog = ({ open, onOpenChange, form, setForm, editingId, saving, o
     }
     setUploadingFile(false);
   };
+
+  const imageLabels = ["Cover Image 1 (Main)", "Cover Image 2", "Cover Image 3"];
 
   return (
     <Dialog open={open} onOpenChange={(o) => { onOpenChange(o); if (!o) onReset(); }}>
@@ -162,38 +168,45 @@ const ProductDialog = ({ open, onOpenChange, form, setForm, editingId, saving, o
             </div>
           </div>
 
-          {/* Image Upload */}
-          <div className="space-y-2">
-            <Label className="flex items-center gap-1.5"><Image className="w-4 h-4" /> Product Image</Label>
-            {form.image_url ? (
-              <div className="relative rounded-md overflow-hidden border border-border">
-                <img src={form.image_url} alt="Preview" className="w-full h-32 object-cover" />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="icon"
-                  className="absolute top-1 right-1 w-6 h-6"
-                  onClick={() => setForm({ ...form, image_url: "" })}
-                >
-                  <X className="w-3 h-3" />
-                </Button>
-              </div>
-            ) : (
-              <div
-                className="border-2 border-dashed border-border rounded-md p-4 text-center cursor-pointer hover:border-accent transition-colors"
-                onClick={() => imageInputRef.current?.click()}
-              >
-                <Upload className="w-6 h-6 mx-auto mb-1 text-muted-foreground" />
-                <p className="text-sm text-muted-foreground">
-                  {uploadingImage ? "Uploading…" : "Click to upload image"}
-                </p>
-              </div>
-            )}
-            <input ref={imageInputRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+          {/* Image Uploads - 3 slots */}
+          <div className="space-y-3">
+            <Label className="flex items-center gap-1.5"><Image className="w-4 h-4" /> Product Images (up to 3)</Label>
+            <div className="grid grid-cols-3 gap-3">
+              {imageFields.map((field, index) => (
+                <div key={field} className="space-y-1.5">
+                  <p className="text-xs text-muted-foreground">{imageLabels[index]}</p>
+                  {form[field] ? (
+                    <div className="relative rounded-md overflow-hidden border border-border">
+                      <img src={form[field]} alt={`Preview ${index + 1}`} className="w-full h-24 object-cover" />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-1 right-1 w-5 h-5"
+                        onClick={() => setForm({ ...form, [field]: "" })}
+                      >
+                        <X className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div
+                      className="border-2 border-dashed border-border rounded-md p-3 text-center cursor-pointer hover:border-accent transition-colors h-24 flex flex-col items-center justify-center"
+                      onClick={() => imageInputRefs[index].current?.click()}
+                    >
+                      <Upload className="w-4 h-4 mx-auto mb-1 text-muted-foreground" />
+                      <p className="text-xs text-muted-foreground">
+                        {uploadingImage === index ? "Uploading…" : "Upload"}
+                      </p>
+                    </div>
+                  )}
+                  <input ref={imageInputRefs[index]} type="file" accept="image/*" className="hidden" onChange={handleImageUpload(index)} />
+                </div>
+              ))}
+            </div>
             <Input
               value={form.image_url}
               onChange={(e) => setForm({ ...form, image_url: e.target.value })}
-              placeholder="Or paste image URL"
+              placeholder="Or paste main image URL"
               className="text-xs"
             />
           </div>
@@ -244,7 +257,7 @@ const ProductDialog = ({ open, onOpenChange, form, setForm, editingId, saving, o
             </div>
           )}
 
-          <Button className="w-full" onClick={onSave} disabled={saving || uploadingImage || uploadingFile}>
+          <Button className="w-full" onClick={onSave} disabled={saving || uploadingImage !== null || uploadingFile}>
             {saving ? "Saving…" : editingId ? "Update Product" : "Create Product"}
           </Button>
         </div>

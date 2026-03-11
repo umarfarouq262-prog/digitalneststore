@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 import { useProductBySlug } from "@/hooks/useProducts";
 
 const ProductDetail = () => {
+  const [selectedImage, setSelectedImage] = useState(0);
   const { slug } = useParams<{ slug: string }>();
   const { addItem } = useCart();
   const { product, isLoading } = useProductBySlug(slug);
@@ -46,7 +48,8 @@ const ProductDetail = () => {
     );
   }
 
-  const imageSrc = product.image_url || "/placeholder.svg";
+  const allImages = [product.image_url, product.image_url_2, product.image_url_3].filter(Boolean) as string[];
+  const imageSrc = allImages[0] || "/placeholder.svg";
   const isAffiliate = product.product_type === "affiliate";
 
   const handleAddToCart = () => {
@@ -83,20 +86,37 @@ const ProductDetail = () => {
           </Link>
 
           <div className="grid md:grid-cols-2 gap-12 items-start">
-            {/* Image */}
-            <div className="relative rounded-xl overflow-hidden border border-border bg-muted">
-              <img
-                src={imageSrc}
-                alt={product.name}
-                className="w-full aspect-[3/4] object-cover"
-              />
-              <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground text-sm px-3 py-1">
-                {product.category}
-              </Badge>
-              {isAffiliate && (
-                <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm px-3 py-1">
-                  External Product
+            {/* Image Gallery */}
+            <div className="space-y-3">
+              <div className="relative rounded-xl overflow-hidden border border-border bg-muted">
+                <img
+                  src={allImages[selectedImage] || imageSrc}
+                  alt={product.name}
+                  className="w-full aspect-[3/4] object-cover"
+                />
+                <Badge className="absolute top-4 left-4 bg-accent text-accent-foreground text-sm px-3 py-1">
+                  {product.category}
                 </Badge>
+                {isAffiliate && (
+                  <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground text-sm px-3 py-1">
+                    External Product
+                  </Badge>
+                )}
+              </div>
+              {allImages.length > 1 && (
+                <div className="flex gap-2">
+                  {allImages.map((img, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedImage(i)}
+                      className={`w-16 h-16 rounded-md overflow-hidden border-2 transition-colors ${
+                        selectedImage === i ? "border-accent" : "border-border hover:border-muted-foreground"
+                      }`}
+                    >
+                      <img src={img} alt={`Thumbnail ${i + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
               )}
             </div>
 

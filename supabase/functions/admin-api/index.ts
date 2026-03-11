@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
 
     // --- CREATE PRODUCT ---
     if (action === "create") {
-      const { name, description, price, old_price, category, image_url, file_url, product_type, affiliate_url } = body;
+      const { name, description, price, old_price, category, image_url, image_url_2, image_url_3, file_url, product_type, affiliate_url } = body;
       if (!name || price === undefined) {
         return jsonResponse({ error: "Name and price are required" }, 400);
       }
@@ -87,6 +87,8 @@ Deno.serve(async (req) => {
         old_price: old_price ? Number(old_price) : null,
         category: ["PDF", "Course", "Template", "Tool"].includes(category) ? category : "PDF",
         image_url: image_url ? String(image_url).slice(0, 1000) : null,
+        image_url_2: image_url_2 ? String(image_url_2).slice(0, 1000) : null,
+        image_url_3: image_url_3 ? String(image_url_3).slice(0, 1000) : null,
         file_url: file_url ? String(file_url) : null,
         product_type: product_type === "affiliate" ? "affiliate" : "my_product",
         affiliate_url: affiliate_url ? String(affiliate_url).slice(0, 2000) : null,
@@ -97,7 +99,7 @@ Deno.serve(async (req) => {
 
     // --- UPDATE PRODUCT ---
     if (action === "update") {
-      const { id, name, description, price, old_price, category, image_url, file_url, product_type, affiliate_url } = body;
+      const { id, name, description, price, old_price, category, image_url, image_url_2, image_url_3, file_url, product_type, affiliate_url } = body;
       if (!id) return jsonResponse({ error: "Product ID required" }, 400);
       const payload: Record<string, unknown> = {};
       if (name !== undefined) payload.name = String(name).slice(0, 200);
@@ -106,6 +108,8 @@ Deno.serve(async (req) => {
       if (old_price !== undefined) payload.old_price = old_price ? Number(old_price) : null;
       if (category !== undefined) payload.category = ["PDF", "Course", "Template", "Tool"].includes(category) ? category : "PDF";
       if (image_url !== undefined) payload.image_url = image_url ? String(image_url).slice(0, 1000) : null;
+      if (image_url_2 !== undefined) payload.image_url_2 = image_url_2 ? String(image_url_2).slice(0, 1000) : null;
+      if (image_url_3 !== undefined) payload.image_url_3 = image_url_3 ? String(image_url_3).slice(0, 1000) : null;
       if (file_url !== undefined) payload.file_url = file_url ? String(file_url) : null;
       if (product_type !== undefined) payload.product_type = product_type === "affiliate" ? "affiliate" : "my_product";
       if (affiliate_url !== undefined) payload.affiliate_url = affiliate_url ? String(affiliate_url).slice(0, 2000) : null;
