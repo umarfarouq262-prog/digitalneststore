@@ -157,6 +157,8 @@ const Dashboard = () => {
       old_price: p.old_price ? String(p.old_price) : "",
       category: p.category,
       image_url: p.image_url || "",
+      image_url_2: p.image_url_2 || "",
+      image_url_3: p.image_url_3 || "",
       file_url: p.file_url || "",
       product_type: p.product_type || "my_product",
       affiliate_url: p.affiliate_url || "",
