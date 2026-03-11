@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,19 +6,19 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
-const TOS_KEY = "digitalnest_tos_accepted";
+import { useAuth } from "@/contexts/AuthContext";
 
 const TermsOfServiceModal = () => {
-  const [open, setOpen] = useState(false);
+  const { user, profile, loading, acceptTos } = useAuth();
 
-  useEffect(() => {
-    setOpen(true);
-  }, []);
+  // Only show for logged-in users who haven't accepted TOS yet
+  const open = !loading && !!user && !!profile && !profile.tos_accepted;
 
-  const handleAgree = () => {
-    setOpen(false);
+  const handleAgree = async () => {
+    await acceptTos();
   };
+
+  if (!open) return null;
 
   return (
     <Dialog open={open} onOpenChange={() => {}}>

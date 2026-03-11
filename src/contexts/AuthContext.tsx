@@ -8,6 +8,7 @@ interface Profile {
   name: string | null;
   profile_image: string | null;
   auth_provider: string;
+  tos_accepted: boolean;
 }
 
 interface AuthContextType {
@@ -15,6 +16,7 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   signOut: () => Promise<void>;
+  acceptTos: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,7 +40,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       async (event, session) => {
         setUser(session?.user ?? null);
         if (session?.user) {
-          // Use setTimeout to avoid Supabase deadlock
           setTimeout(() => fetchProfile(session.user.id), 0);
         } else {
           setProfile(null);
@@ -64,8 +65,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null);
   }, []);
 
+  const acceptTos = useCallback(async () => {
+    if (!user) return;
+    await supabase
+      .from("profiles")
+      .update({ tos_accepted: true } as any)
+      .eq("id", user.id);
+    setProfile((prev) => prev ? { ...prev, tos_accepted: true } : prev);
+  }, [user]);
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading, signOut }}>
+    <AuthContext.Provider value={{ user, profile, loading, signOut, acceptTos }}>
       {children}
     </AuthContext.Provider>
   );
