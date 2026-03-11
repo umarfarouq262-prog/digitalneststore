@@ -186,6 +186,7 @@ export type Database = {
           id: string
           name: string | null
           profile_image: string | null
+          tos_accepted: boolean
         }
         Insert: {
           auth_provider?: string | null
@@ -194,6 +195,7 @@ export type Database = {
           id: string
           name?: string | null
           profile_image?: string | null
+          tos_accepted?: boolean
         }
         Update: {
           auth_provider?: string | null
@@ -202,6 +204,7 @@ export type Database = {
           id?: string
           name?: string | null
           profile_image?: string | null
+          tos_accepted?: boolean
         }
         Relationships: []
       }

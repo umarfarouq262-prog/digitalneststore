@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN tos_accepted boolean NOT NULL DEFAULT false;
