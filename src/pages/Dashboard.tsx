@@ -23,7 +23,7 @@ interface Product {
   affiliate_url: string | null;
 }
 
-const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", file_url: "", product_type: "my_product", affiliate_url: "" };
+const emptyForm: ProductForm = { name: "", description: "", price: "", old_price: "", category: "PDF", image_url: "", image_url_2: "", image_url_3: "", file_url: "", product_type: "my_product", affiliate_url: "" };
 
 const adminApi = async (body: Record<string, unknown>) => {
   const token = sessionStorage.getItem("admin_token");
