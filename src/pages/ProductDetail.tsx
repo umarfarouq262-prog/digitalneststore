@@ -47,7 +47,8 @@ const ProductDetail = () => {
     );
   }
 
-  const imageSrc = product.image_url || "/placeholder.svg";
+  const allImages = [product.image_url, product.image_url_2, product.image_url_3].filter(Boolean) as string[];
+  const imageSrc = allImages[0] || "/placeholder.svg";
   const isAffiliate = product.product_type === "affiliate";
 
   const handleAddToCart = () => {
