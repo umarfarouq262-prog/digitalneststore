@@ -98,36 +98,6 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
-          <div className="border-t border-border pt-3 mt-3 space-y-2">
-            {user ? (
-              <>
-                <div className="flex items-center gap-2 py-1">
-                  <Avatar className="w-6 h-6">
-                    <AvatarImage src={profile?.profile_image || undefined} />
-                    <AvatarFallback className="bg-accent text-accent-foreground text-[9px] font-bold">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm font-body text-foreground truncate">{profile?.name || user.email}</span>
-                </div>
-                <button
-                  onClick={() => { setOpen(false); signOut(); }}
-                  className="text-sm font-body text-destructive py-1"
-                >
-                  Sign out
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-muted-foreground py-1">
-                  Sign in
-                </Link>
-                <Link to="/signup" onClick={() => setOpen(false)} className="block text-sm font-body font-medium text-accent py-1">
-                  Sign up
-                </Link>
-              </>
-            )}
-          </div>
         </div>
       )}
     </nav>

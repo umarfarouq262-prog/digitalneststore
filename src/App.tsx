@@ -11,8 +11,6 @@ import ProductDetail from "./pages/ProductDetail";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Cart from "./pages/Cart";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import AdminLogin from "./pages/AdminLogin";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
