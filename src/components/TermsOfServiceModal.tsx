@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,16 +7,22 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
+
+const TOS_KEY = "digitalnest_tos_accepted";
 
 const TermsOfServiceModal = () => {
-  const { user, profile, loading, acceptTos } = useAuth();
+  const [open, setOpen] = useState(false);
 
-  // Only show for logged-in users who haven't accepted TOS yet
-  const open = !loading && !!user && !!profile && !profile.tos_accepted;
+  useEffect(() => {
+    const accepted = localStorage.getItem(TOS_KEY);
+    if (!accepted) {
+      setOpen(true);
+    }
+  }, []);
 
-  const handleAgree = async () => {
-    await acceptTos();
+  const handleAgree = () => {
+    localStorage.setItem(TOS_KEY, "true");
+    setOpen(false);
   };
 
   if (!open) return null;
@@ -52,7 +59,7 @@ const TermsOfServiceModal = () => {
           <p>Thank you for visiting Digital Nest!</p>
         </div>
         <DialogFooter>
-          <Button onClick={handleAgree} className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+          <Button onClick={handleAgree} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
             Accept & Continue
           </Button>
         </DialogFooter>
