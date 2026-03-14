@@ -1,9 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Search, ShoppingCart, User, LogOut, ChevronDown } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { Menu, X, ShoppingCart } from "lucide-react";
+import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
-import { useAuth } from "@/contexts/AuthContext";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const navLinks = [
   { to: "/", label: "Home" },
