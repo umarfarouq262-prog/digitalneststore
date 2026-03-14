@@ -73,15 +73,6 @@ const Navbar = () => {
             )}
           </Link>
 
-          {user && (
-            <Avatar className="w-7 h-7">
-              <AvatarImage src={profile?.profile_image || undefined} />
-              <AvatarFallback className="bg-accent text-accent-foreground text-[10px] font-bold">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-          )}
-
           <button
             className="text-foreground"
             onClick={() => setOpen(!open)}
